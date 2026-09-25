@@ -13,7 +13,7 @@ jobs:
   node-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -23,7 +23,7 @@ jobs:
   guardas:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: nenhuma chamada ao dispatcher de submissão
         run: |
           if grep -rniE "submitaction" --include='*.js' . --exclude-dir=node_modules | grep -v '/test/'; then
