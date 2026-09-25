@@ -1,0 +1,99 @@
+suite-timesheet-mcp — Source-Available License
+Copyright (c) 2026 Willian Saez. All rights reserved.
+
+The English text below is the governing version. The Portuguese translation that follows is
+provided for convenience; if the two differ, the English text prevails.
+
+-------------------------------------------------------------------------------
+ENGLISH
+-------------------------------------------------------------------------------
+
+1. Definitions. "Software" means the source code, documentation and other files in this
+   repository and in any package built from it. "You" means the individual or legal entity
+   exercising the permissions granted by this license.
+
+2. Permitted use. Subject to the conditions of this license, you may:
+   a) view and read the Software;
+   b) download, install and run unmodified copies of the Software, including through package
+      tools such as npm or npx, solely for your own personal use or for the internal business
+      purposes of your organization, by you and your organization's employees and contractors.
+
+3. Restrictions. Except as expressly permitted in section 2, you may not, in whole or in part:
+   a) modify, adapt, translate or create derivative works of the Software;
+   b) copy the Software, except for the copies strictly necessary for the use permitted in
+      section 2 (including those made automatically by package managers and caches);
+   c) distribute, publish, sublicense, sell, rent, lend or otherwise make the Software available
+      to any third party, including by hosting copies, mirrors or forks of it on any platform or
+      offering it as a service;
+   d) remove or alter this license or any copyright notice.
+
+   A fork created through a code-hosting platform's own features (for example, under the terms
+   of service of GitHub) grants no rights beyond viewing it on that platform; any other use of
+   such a fork is subject to the restrictions above.
+
+4. Reservation of rights. All rights not expressly granted are reserved by the copyright holder.
+   No right is granted to any trademark, name or logo.
+
+5. Termination. This license terminates automatically if you breach any of its terms. Upon
+   termination you must stop using the Software and delete all copies in your possession.
+
+6. No warranty. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+   PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+
+7. Limitation of liability. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM,
+   DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OF OR OTHER DEALINGS IN THE
+   SOFTWARE, INCLUDING ANY DATA ENTERED INTO THIRD-PARTY SYSTEMS THROUGH IT.
+
+8. Other permissions. Any use not permitted by this license, including contributions,
+   modifications or redistribution, requires the prior written permission of the copyright
+   holder.
+
+-------------------------------------------------------------------------------
+PORTUGUÊS (tradução)
+-------------------------------------------------------------------------------
+
+1. Definições. "Software" designa o código-fonte, a documentação e os demais ficheiros deste
+   repositório e de qualquer pacote gerado a partir dele. "Tu" designa a pessoa singular ou
+   coletiva que exerce as permissões concedidas por esta licença.
+
+2. Uso permitido. Nas condições desta licença, podes:
+   a) ver e ler o Software;
+   b) descarregar, instalar e executar cópias não modificadas do Software, incluindo através de
+      ferramentas de pacotes como npm ou npx, exclusivamente para uso pessoal ou para fins
+      internos da tua organização, por ti e pelos colaboradores e prestadores de serviços dessa
+      organização.
+
+3. Restrições. Salvo o expressamente permitido na secção 2, não podes, no todo ou em parte:
+   a) modificar, adaptar, traduzir ou criar obras derivadas do Software;
+   b) copiar o Software, exceto as cópias estritamente necessárias ao uso permitido na secção 2
+      (incluindo as feitas automaticamente por gestores de pacotes e caches);
+   c) distribuir, publicar, sublicenciar, vender, alugar, emprestar ou de outra forma
+      disponibilizar o Software a terceiros, incluindo alojar cópias, espelhos ou forks dele em
+      qualquer plataforma ou oferecê-lo como serviço;
+   d) remover ou alterar esta licença ou qualquer aviso de direitos de autor.
+
+   Um fork criado através das funcionalidades de uma plataforma de alojamento de código (por
+   exemplo, ao abrigo dos termos de serviço do GitHub) não confere nenhum direito além de o
+   ver nessa plataforma; qualquer outro uso desse fork está sujeito às restrições acima.
+
+4. Reserva de direitos. Todos os direitos não expressamente concedidos ficam reservados ao
+   titular dos direitos de autor. Não é concedido nenhum direito sobre marcas, nomes ou logótipos.
+
+5. Cessação. Esta licença cessa automaticamente se violares qualquer dos seus termos. Com a
+   cessação, deves deixar de usar o Software e apagar todas as cópias em teu poder.
+
+6. Sem garantia. O SOFTWARE É FORNECIDO "TAL COMO ESTÁ", SEM GARANTIA DE QUALQUER TIPO,
+   EXPRESSA OU IMPLÍCITA, INCLUINDO, SEM LIMITAÇÃO, AS GARANTIAS DE COMERCIABILIDADE, ADEQUAÇÃO
+   A UM FIM ESPECÍFICO E NÃO VIOLAÇÃO.
+
+7. Limitação de responsabilidade. EM CASO ALGUM O TITULAR DOS DIREITOS DE AUTOR SERÁ
+   RESPONSÁVEL POR QUALQUER RECLAMAÇÃO, DANO OU OUTRA RESPONSABILIDADE, SEJA EM AÇÃO
+   CONTRATUAL, EXTRACONTRATUAL OU OUTRA, DECORRENTE DO SOFTWARE, DO SEU USO OU DE OUTRAS
+   OPERAÇÕES COM ELE, INCLUINDO QUAISQUER DADOS INTRODUZIDOS EM SISTEMAS DE TERCEIROS ATRAVÉS
+   DELE.
+
+8. Outras permissões. Qualquer uso não permitido por esta licença, incluindo contribuições,
+   modificações ou redistribuição, requer autorização prévia e por escrito do titular dos
+   direitos de autor.

@@ -1,0 +1,30 @@
+{
+  "name": "suite-timesheet-mcp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Serviço local e servidor MCP para o Suite Timesheet Importer: o Claude lê e propõe horas; a extensão escreve depois de confirmação.",
+  "license": "SEE LICENSE IN LICENSE",
+  "bin": {
+    "suite-timesheet-serve": "serve.js",
+    "suite-timesheet-mcp": "mcp.js"
+  },
+  "files": [
+    "mcp.js",
+    "serve.js",
+    "lib/",
+    "CONTRACT.md",
+    "SECURITY.md"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "serve": "node serve.js",
+    "mcp": "node mcp.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0"
+  }
+}

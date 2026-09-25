@@ -1,0 +1,52 @@
+name: testes
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  node-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: node --test
+
+  guardas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: nenhuma chamada ao dispatcher de submissão
+        run: |
+          if grep -rniE "submitaction" --include='*.js' . --exclude-dir=node_modules | grep -v '/test/'; then
+            echo "Encontrada referência ao endpoint proibido."; exit 1
+          fi
+      - name: o código só conhece a máquina local
+        run: |
+          if grep -rnoE "https?://[a-zA-Z0-9.-]+" --include='*.js' --exclude-dir=node_modules --exclude-dir=test . \
+              | grep -vE "https?://(127\.0\.0\.1|localhost)$"; then
+            echo "O pacote não pode conhecer hosts além de 127.0.0.1/localhost."; exit 1
+          fi
+      # A lista de nomes proibidos vive num secret: pô-la aqui publicava-a. Em PRs de forks o
+      # secret não chega ao job; aí o guard avisa e corre de novo no push para o main.
+      - name: nenhum nome de cliente real
+        env:
+          PROIBIDOS: ${{ secrets.NOMES_PROIBIDOS_REGEX }}
+        run: |
+          if [ -z "$PROIBIDOS" ]; then
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              echo "::warning::secret NOMES_PROIBIDOS_REGEX indisponível neste PR; guard adiado para o push."; exit 0
+            fi
+            echo "Falta o secret NOMES_PROIBIDOS_REGEX."; exit 1
+          fi
+          if grep -rliE "$PROIBIDOS" . --exclude-dir=.git --exclude-dir=node_modules; then
+            echo "Encontrado nome real de cliente (ficheiros acima)."; exit 1
+          fi
