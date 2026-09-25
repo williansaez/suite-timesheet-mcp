@@ -1,10 +1,26 @@
 {
   "name": "suite-timesheet-mcp",
   "version": "1.0.0",
-  "private": true,
   "type": "module",
-  "description": "Serviço local e servidor MCP para o Suite Timesheet Importer: o Claude lê e propõe horas; a extensão escreve depois de confirmação.",
+  "description": "Servidor MCP para o Suite Timesheet Importer: um assistente (Claude, Copilot…) lê e propõe horas; a extensão escreve depois de confirmação humana.",
   "license": "SEE LICENSE IN LICENSE",
+  "author": "Willian Saez",
+  "homepage": "https://github.com/williansaez/suite-timesheet-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williansaez/suite-timesheet-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/williansaez/suite-timesheet-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "timesheet",
+    "suite",
+    "claude",
+    "copilot"
+  ],
   "bin": {
     "suite-timesheet-serve": "serve.js",
     "suite-timesheet-mcp": "mcp.js"
@@ -19,7 +35,8 @@
   "scripts": {
     "test": "node --test",
     "serve": "node serve.js",
-    "mcp": "node mcp.js"
+    "mcp": "node mcp.js",
+    "prepublishOnly": "node --test"
   },
   "engines": {
     "node": ">=20"

@@ -28,19 +28,20 @@ Este passo é manual e feito uma vez: sem ele a extensão nunca toca na rede loc
 
 ### 2. Registar o servidor no teu cliente MCP
 
-Não é preciso clonar nada: o `npx` descarrega e corre a versão indicada. A primeira execução
-demora alguns segundos (instala a dependência); as seguintes usam a cache.
+Não é preciso clonar nada: o `npx` descarrega o pacote do npm e corre-o. `@1` fixa a versão
+principal: recebes as correções 1.x, nunca uma versão incompatível. A primeira execução demora
+alguns segundos; as seguintes usam a cache.
 
 **Claude Code**
 
 ```bash
-claude mcp add --scope user suite-timesheet -- npx -y github:williansaez/suite-timesheet-mcp#v1.0.0
+claude mcp add --scope user suite-timesheet -- npx -y suite-timesheet-mcp@1
 ```
 
 **GitHub Copilot (VS Code)**
 
 ```bash
-code --add-mcp '{"name":"suite-timesheet","command":"npx","args":["-y","github:williansaez/suite-timesheet-mcp#v1.0.0"]}'
+code --add-mcp '{"name":"suite-timesheet","command":"npx","args":["-y","suite-timesheet-mcp@1"]}'
 ```
 
 Depois recarrega a janela; as tools aparecem no modo **Agent** do Copilot.
@@ -56,7 +57,7 @@ Em Definições → Programador → Editar configuração
   "mcpServers": {
     "suite-timesheet": {
       "command": "npx",
-      "args": ["-y", "github:williansaez/suite-timesheet-mcp#v1.0.0"]
+      "args": ["-y", "suite-timesheet-mcp@1"]
     }
   }
 }
@@ -66,7 +67,7 @@ Reinicia o Claude Desktop.
 
 **Outros clientes**
 
-O mesmo comando: `npx -y github:williansaez/suite-timesheet-mcp#v1.0.0`, por stdio. Atenção à
+O mesmo comando: `npx -y suite-timesheet-mcp@1`, por stdio. Atenção à
 chave do ficheiro de configuração: o VS Code usa `servers`, a maioria dos outros usa
 `mcpServers`.
 
@@ -168,8 +169,9 @@ cortar a chamada antes disso, aumenta o timeout do cliente MCP (no Claude Code, 
 
 ## Atualizar
 
-Muda a tag no comando (`#v1.0.0` → nova versão) e reinicia o cliente MCP. O serviço local fica a
-correr entre sessões; para ele pegar na versão nova, termina-o uma vez
+As correções 1.x chegam ao reiniciar o cliente MCP (o `npx` volta a consultar o npm). Para uma
+versão principal nova, muda `@1` no comando. O serviço local fica a correr entre sessões; para
+ele pegar na versão nova, termina-o uma vez
 (`lsof -ti tcp:18765 | xargs kill`) e o `mcp.js` arranca o novo.
 
 ## Limitações
@@ -189,7 +191,8 @@ node --test
 ```
 
 Para usar a cópia local num cliente, troca o comando `npx …` por
-`node /caminho/para/suite-timesheet-mcp/mcp.js`.
+`node /caminho/para/suite-timesheet-mcp/mcp.js`. Também dá para instalar diretamente de uma tag do
+GitHub, sem npm: `npx -y github:williansaez/suite-timesheet-mcp#v1.0.0` (precisa de `git`).
 
 ## Licença
 
