@@ -207,3 +207,30 @@ test('o cliente real traduz rede em ERR_SERVE_EM_BAIXO e HTTP em erro com o code
   await ok.resultado('a b', 5, 'previa');
   assert.equal(pedidos[0][0], 'http://x/mcp/comando/a%20b?wait=5&fase=previa');
 });
+
+test('propor: schema aceita comment opcional por linha e ler_mes fala das Observações', () => {
+  const propor = FERRAMENTAS.find((f) => f.name === 'propor');
+  const linha = propor.inputSchema.properties.linhas.items;
+  assert.equal(linha.properties.comment.type, 'string');
+  assert.equal(linha.additionalProperties, false);
+  assert.ok(!linha.required.includes('comment'));
+  assert.match(FERRAMENTAS.find((f) => f.name === 'ler_mes').description, /Observações/);
+});
+
+const previaOk = () => ({ id: 'p9', estado: 'concluido', resultado: { ok: true, dados: { fase: 'previa', previa: { bloqueio: null } } } });
+const comComentario = { linhas: [{ option_id: 101, date: '2026-09-02', hours: 1, comment: 'Arranque' }] };
+
+test('propor com comment envia-o e avisa quando a extensão é anterior à 1.1.0', async () => {
+  const antiga = clienteFalso({ estado: { ponte: 'ligada', contexto: { ano: 2026, mes: 9 } }, comando: previaOk });
+  const r = await executar('propor', comComentario, antiga);
+  assert.equal(antiga.chamadas.find((ch) => ch[0] === 'comando')[1].linhas[0].comment, 'Arranque');
+  assert.match(r.aviso, /1\.1\.0/);
+});
+
+test('propor com comment e extensão 1.1.0 não avisa; sem comment nem consulta a versão', async () => {
+  const nova = clienteFalso({ estado: { ponte: 'ligada', contexto: { versaoExtensao: '1.1.0' } }, comando: previaOk });
+  assert.equal((await executar('propor', comComentario, nova)).aviso, undefined);
+  const sem = clienteFalso({ comando: previaOk });
+  await executar('propor', { linhas: [{ option_id: 101, date: '2026-09-02', hours: 1 }] }, sem);
+  assert.equal(sem.chamadas.some((ch) => ch[0] === 'estado'), false);
+});

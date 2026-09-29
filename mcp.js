@@ -27,7 +27,7 @@ if (process.env.SUITE_TIMESHEET_SEM_AUTOARRANQUE !== '1') {
 }
 
 const server = new Server(
-  { name: 'suite-timesheet', version: '1.0.0' },
+  { name: 'suite-timesheet', version: '1.1.0' },
   { capabilities: { tools: {} } },
 );
 

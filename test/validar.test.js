@@ -50,3 +50,17 @@ test('com o mês visível recusa datas fora dele', () => {
   );
   assert.doesNotThrow(() => validarProposta(ok, { ano: 2026, mes: 9 }));
 });
+
+test('comment é opcional: passa aparado quando vem, fica de fora quando vazio', () => {
+  const [com] = validarProposta({ linhas: [{ option_id: 101, date: '2026-09-02', hours: 1, comment: '  Arranque ' }] }).linhas;
+  assert.equal(com.comment, 'Arranque');
+  const [vazio] = validarProposta({ linhas: [{ option_id: 101, date: '2026-09-02', hours: 1, comment: '  ' }] }).linhas;
+  assert.equal('comment' in vazio, false);
+});
+
+test('comment que não é texto é recusado com o número da linha', () => {
+  assert.throws(
+    () => validarProposta({ linhas: [{ option_id: 101, date: '2026-09-02', hours: 1, comment: 42 }] }),
+    (e) => e.code === 'ERR_PROPOSTA' && /linha 1: comment tem de ser texto/.test(e.message),
+  );
+});
