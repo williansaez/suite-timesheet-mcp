@@ -1,7 +1,44 @@
-# suite-timesheet-mcp
+<p align="center">
+  <img src="docs/media/icone.png" alt="Ícone do Suite Timesheet Importer" width="96">
+</p>
 
-Servidor MCP que deixa um assistente (Claude, GitHub Copilot, ou outro cliente MCP) **ler e
-propor horas** na Folha de Horas do Suite, através da extensão **Suite Timesheet Importer**.
+<h1 align="center">suite-timesheet-mcp</h1>
+
+<p align="center">
+  <strong>O agente propõe. Tu aprovas.</strong><br>
+  Servidor MCP que deixa um agente de IA <strong>ler e propor horas</strong> na Folha de Horas do
+  Suite, através da extensão <strong>Suite Timesheet Importer</strong>.
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/suite-timesheet-mcp"><img alt="versão no npm" src="https://img.shields.io/npm/v/suite-timesheet-mcp?color=1f6699&label=npm"></a>
+  <img alt="Model Context Protocol" src="https://img.shields.io/badge/MCP-stdio-2a7fba">
+  <img alt="Node 20 ou superior" src="https://img.shields.io/badge/node-%E2%89%A5%2020-1e7a34">
+  <img alt="só loopback" src="https://img.shields.io/badge/rede-s%C3%B3%20127.0.0.1-1e7a34">
+  <img alt="sem telemetria" src="https://img.shields.io/badge/telemetria-nenhuma-1e7a34">
+</p>
+
+<p align="center">
+  <a href="docs/media/lancamento-1.1.0.mp4">
+    <img src="docs/media/agente.gif" alt="Um agente recebe um pedido, propõe o lançamento e pede aprovação" width="820">
+  </a>
+  <br>
+  <sub>Excerto do vídeo de lançamento da 1.1.0, com o Copilot como exemplo de agente. Clica para ver o vídeo completo. Dados fictícios.</sub>
+</p>
+
+## Porquê
+
+O Suite não tem API para agentes. Este pacote dá-lhe uma, sem tocar no Suite:
+
+- **Pedes em linguagem natural.** "Lança 4 h de hoje no Alfa: migração de dados."
+- **O agente lê e propõe.** Vê o mês aberto, os projetos do teu dropdown e o que já está
+  lançado, e monta a proposta.
+- **Tu decides.** A proposta abre no painel da extensão com a pré-visualização. Só é escrita
+  depois de aprovares.
+
+Funciona com qualquer agente que fale MCP. O servidor não sabe nem precisa de saber qual é.
+
+## Garantias
 
 - **Nunca fala com o Suite.** Quem lê e escreve é a extensão, no teu browser, com a tua sessão.
 - **Nunca escreve sem ti.** Cada lançamento é uma proposta; só é escrito quando clicas Aplicar
@@ -26,17 +63,11 @@ Nas **Opções** da extensão, liga **Ligação ao servidor local (ponte MCP)**,
 
 Este passo é manual e feito uma vez: sem ele a extensão nunca toca na rede local.
 
-### 2. Registar o servidor no teu cliente MCP
+### 2. Registar o servidor no teu agente
 
 Não é preciso clonar nada: o `npx` descarrega o pacote do npm e corre-o. `@1` fixa a versão
 principal: recebes as correções 1.x, nunca uma versão incompatível. A primeira execução demora
 alguns segundos; as seguintes usam a cache.
-
-**Claude Code**
-
-```bash
-claude mcp add --scope user suite-timesheet -- npx -y suite-timesheet-mcp@1
-```
 
 **GitHub Copilot (VS Code)**
 
@@ -45,6 +76,12 @@ code --add-mcp '{"name":"suite-timesheet","command":"npx","args":["-y","suite-ti
 ```
 
 Depois recarrega a janela; as tools aparecem no modo **Agent** do Copilot.
+
+**Claude Code**
+
+```bash
+claude mcp add --scope user suite-timesheet -- npx -y suite-timesheet-mcp@1
+```
 
 **Claude Desktop (inclui Cowork)**
 
@@ -65,7 +102,7 @@ Em Definições → Programador → Editar configuração
 
 Reinicia o Claude Desktop.
 
-**Outros clientes**
+**Outros agentes**
 
 O mesmo comando: `npx -y suite-timesheet-mcp@1`, por stdio. Atenção à
 chave do ficheiro de configuração: o VS Code usa `servers`, a maioria dos outros usa
@@ -77,9 +114,9 @@ chave do ficheiro de configuração: o VS Code usa `servers`, a maioria dos outr
 
 ### 3. Verificar
 
-Pede ao assistente: *"consulta o estado da ponte do Suite Timesheet"*. A tool `estado` deve
+Pede ao agente: *"consulta o estado da ponte do Suite Timesheet"*. A tool `estado` deve
 responder com a ponte ligada e o mês visível na página. As Opções da extensão passam a mostrar
-"Claude ligado há N s" (o texto é o mesmo para qualquer cliente).
+"Agente ligado há N s" (o texto é o mesmo para qualquer agente).
 
 ## Instalação feita por um agente
 
@@ -102,18 +139,22 @@ Exemplos de pedidos:
 - *"Quantas horas tenho lançadas este mês no Suite?"* → `ler_mes`
 - *"Que projetos tenho disponíveis?"* → `projetos`
 - *"Lança 8 h no projeto X de segunda a sexta desta semana."* → `propor`, depois `aplicar`
+- *"Soma 2 h ao dia de hoje no projeto X, com a nota 'reunião de arranque'."* → `propor` em
+  modo `somar`, com `comment`
 
 Lançar horas tem sempre duas fases:
 
 1. **`propor`** calcula o plano, abre o painel da extensão com a pré-visualização e devolve-a ao
-   assistente. Nada é escrito.
+   agente. Nada é escrito.
 2. **Confirmação**, de uma de duas formas:
    - clicas **Aplicar** no painel, ou
    - dizes OK no chat e aprovas a chamada da tool **`aplicar`** no cliente MCP.
 
-Por isso: **mantém a aprovação manual da tool `aplicar`**. Com ela em aprovação automática,
-qualquer proposta é escrita sem mais nenhuma confirmação. Linhas trancadas e propostas
-bloqueadas são sempre recusadas pela extensão.
+> [!IMPORTANT]
+> Mantém a aprovação manual da tool `aplicar`. Com ela em aprovação automática, qualquer
+> proposta é escrita sem mais nenhuma confirmação.
+
+Linhas trancadas e propostas bloqueadas são sempre recusadas pela extensão.
 
 ## Tools
 
@@ -121,10 +162,55 @@ bloqueadas são sempre recusadas pela extensão.
 |---|---|
 | `estado` | ponte ligada?, mês visível, nº de projetos, lote a correr |
 | `projetos` | projetos do dropdown da página: `option_id`, nome, trancado |
-| `ler_mes` | horas já lançadas no mês visível |
+| `ler_mes` | horas e Observações já lançadas no mês visível |
 | `propor` | calcula o plano, abre o painel, devolve a pré-visualização e um `id` |
-| `aplicar` | escreve a proposta `id` no Suite através da extensão |
+| `aplicar` | escreve a proposta `id` no Suite através da extensão, sem esperar pelo clique no painel |
 | `resultado` | espera pela decisão (painel ou `aplicar`): aplicado, cancelado, erro ou pendente |
+
+### `propor`
+
+```json
+{
+  "modo": "somar",
+  "linhas": [
+    {
+      "project": "Alfa - Projeto SAP",
+      "date": "2026-10-14",
+      "hours": 4,
+      "comment": "Migração de dados"
+    }
+  ]
+}
+```
+
+| campo | notas |
+|---|---|
+| `linhas[].option_id` ou `project` | um dos dois: id do dropdown ou nome tal como lá aparece |
+| `linhas[].date` | `YYYY-MM-DD`, dentro do mês visível |
+| `linhas[].hours` | 0,5 a 23,5 em passos de 0,5; em `somar` pode ser negativo |
+| `linhas[].comment` | opcional; vai para as Observações do projeto no mês |
+| `modo` | `normal` (defeito), `somar` ou `sobregravar` |
+| `nome` | opcional; rótulo que aparece no painel |
+
+| modo | o que vem nas linhas | o que não vem |
+|---|---|---|
+| `normal` | fica com o valor pedido | fica como está |
+| `somar` | Suite + pedido (negativos subtraem) | fica como está |
+| `sobregravar` | fica com o valor pedido | é apagado |
+
+Propor duas vezes em `somar` duplica. Mais de 8 h num dia é só aviso.
+
+## Novidades da 1.1.0
+
+- **`propor` aceita `modo`**: `normal`, `somar` ou `sobregravar`, no lugar do antigo `espelho`
+  (que continua aceite).
+- **`propor` aceita `comment` por linha**, que vai para as Observações do projeto.
+- **`ler_mes` devolve as Observações.**
+- **Comentários que o Suite ignoraria em silêncio são recusados** antes de propor.
+- **`ERR_EXTENSAO_ANTIGA`**: com uma extensão anterior à 1.1.0, os modos `normal` e `somar` são
+  recusados, porque a extensão antiga faria outra coisa.
+
+Os modos `normal` e `somar` e os comentários precisam da extensão ≥ 1.1.0.
 
 ## Erros
 
@@ -133,16 +219,25 @@ bloqueadas são sempre recusadas pela extensão.
 | `ERR_SERVE_EM_BAIXO` | o serviço local não responde; reinicia o cliente MCP (ele arranca-o sozinho) |
 | `ERR_SEM_CHROME` | abre a Folha de Horas e confirma que a ponte está ligada nas Opções |
 | `ERR_SEM_CONTEXTO` | recarrega a Folha de Horas (o serviço reiniciou depois de a página carregar) |
+| `ERR_SEM_ABA` | não há nenhuma aba do Suite aberta; abre-a ou recarrega-a |
 | `ERR_MES_DIFERENTE` | muda o mês na página; o MCP nunca o muda por ti |
 | `ERR_OCUPADO` | há uma proposta à espera no painel; aplica-a ou cancela-a primeiro |
+| `ERR_LOTE_A_CORRER` | já está um lote a escrever no Suite; espera que termine |
+| `ERR_SESSION` | a sessão do Suite expirou; entra outra vez |
 | `ERR_PROPOSTA_DESCONHECIDA` | o `id` passado a `aplicar` não corresponde a nenhuma proposta pendente |
+| `ERR_EXTENSAO_ANTIGA` | atualiza a extensão para a 1.1.0, ou usa `modo: "sobregravar"` |
+
+Lista completa em [CONTRACT.md](CONTRACT.md).
 
 ## Como funciona
 
-```
-cliente MCP ──stdio──▶ mcp.js ──HTTP──▶ serve.js ◀──long-poll── extensão ──▶ Suite
-                                        127.0.0.1                    │
-                                                              painel: Aplicar
+```mermaid
+flowchart LR
+    C["Agente<br>cliente MCP"] -->|stdio| M["mcp.js"]
+    M -->|HTTP local| S["serve.js<br>127.0.0.1:18765"]
+    E["Extensão<br>no browser"] -->|long-poll| S
+    E -->|"lê e escreve<br>com a tua sessão"| T["Folha de Horas<br>do Suite"]
+    E --- P["Painel: pré-visualização<br>e Aplicar"]
 ```
 
 1. O cliente MCP arranca o `mcp.js`. Se o serviço local (`serve.js`) não estiver a correr, o
@@ -165,7 +260,8 @@ Com o serviço gerido à mão, arranca-o **antes** de abrir a Folha de Horas, ou
 depois: a extensão só publica o contexto quando a página carrega ou muda de mês.
 
 As tools aceitam `timeout_s` até 290 s (útil em `resultado` com lotes grandes). Se o cliente
-cortar a chamada antes disso, aumenta o timeout do cliente MCP (no Claude Code, 60 s por defeito).
+cortar a chamada antes disso, aumenta o timeout do cliente MCP (muitos cortam aos 60 s por
+defeito).
 
 ## Atualizar
 
@@ -192,7 +288,7 @@ node --test
 
 Para usar a cópia local num cliente, troca o comando `npx …` por
 `node /caminho/para/suite-timesheet-mcp/mcp.js`. Também dá para instalar diretamente de uma tag do
-GitHub, sem npm: `npx -y github:williansaez/suite-timesheet-mcp#v1.0.0` (precisa de `git`).
+GitHub, sem npm: `npx -y github:williansaez/suite-timesheet-mcp#v1.1.0` (precisa de `git`).
 
 ## Licença
 
@@ -200,3 +296,7 @@ Código disponível para consulta, **não open source**. Podes instalar e usar o
 alterações, para uso pessoal ou interno da tua organização. Não é permitido alterá-lo,
 redistribuí-lo nem publicar cópias ou forks. Os termos completos (em inglês, com tradução para
 português) estão em [LICENSE](LICENSE).
+
+<p align="center">
+  <img src="docs/media/fecho.png" alt="Suite Timesheet Importer 1.1.0 e suite-timesheet-mcp 1.1.0. O Suite de sempre, a tecnologia de hoje." width="820">
+</p>
