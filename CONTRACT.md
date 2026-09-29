@@ -49,7 +49,7 @@ com o plano calculado (o painel abre nesse momento), e depois, quando o utilizad
 
 A extensão continua a ser a única coisa que escreve no Suite, sempre depois de o utilizador
 clicar Aplicar no painel ou de aprovar a tool `aplicar` no cliente MCP (ver secção "aplicar"
-abaixo). Nunca submete o mês, nunca muda o mês.
+abaixo), e só no mês aberto na página. Nunca submete as horas, nunca troca o mês selecionado.
 
 ### Prazo de `/bridge/next`
 
