@@ -2,7 +2,7 @@
   "name": "suite-timesheet-mcp",
   "version": "1.1.0",
   "type": "module",
-  "description": "Servidor MCP para o Suite Timesheet Importer: um assistente (Claude, Copilot…) lê e propõe horas; a extensão escreve depois de confirmação humana.",
+  "description": "Servidor MCP para o Suite Timesheet Importer: um agente de IA lê e propõe horas; a extensão escreve depois de confirmação humana.",
   "license": "SEE LICENSE IN LICENSE",
   "author": "Willian Saez",
   "homepage": "https://github.com/williansaez/suite-timesheet-mcp#readme",

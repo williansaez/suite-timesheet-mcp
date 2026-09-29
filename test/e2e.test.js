@@ -114,7 +114,7 @@ test('ponta-a-ponta: estado, ler_mes, propor e resultado através de um serve re
       assert.deepEqual(timesheet.rows, [{ option_id: 101, project: '', date: '2026-09-03', hours: 1 }]);
 
       // Depois de as tools terem corrido, /health já reporta ultimoMcp (não null) e a
-      // identidade do serve, para o painel da extensão mostrar "Claude ligado há N s".
+      // identidade do serve, para o painel da extensão mostrar "Agente ligado há N s".
       const health = await (await fetch(`${base}/health`)).json();
       assert.equal(health.nome, 'suite-timesheet-serve');
       assert.equal(typeof health.ultimoMcp, 'string');
