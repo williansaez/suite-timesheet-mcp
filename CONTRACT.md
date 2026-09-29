@@ -10,12 +10,12 @@ Um serviço que implemente estas três rotas passa a poder pedir leituras e prop
 
 | método | rota | corpo / resposta |
 |---|---|---|
-| `POST` | `/bridge/contexto` | a extensão envia `{ano, mes, diasNoMes, projetos: [{option_id, nome, trancado}], lidoEm}` sempre que a Folha de Horas carrega ou muda de mês |
+| `POST` | `/bridge/contexto` | a extensão envia `{ano, mes, diasNoMes, projetos: [{option_id, nome, trancado}], lidoEm, versaoExtensao}` (`versaoExtensao` a partir da extensão 1.1.0) sempre que a Folha de Horas carrega ou muda de mês |
 | `GET` | `/bridge/next?wait=25` | responde `204` sem corpo se não houver comando ao fim de `wait` segundos, ou `200` com um comando |
 | `POST` | `/bridge/result/{id}` | a extensão publica o resultado do comando `id` |
 
 Comando: `{"id": "texto", "tipo": "estado" | "projetos" | "ler" | "propor" | "aplicar", "ano": 2026, "mes": 9}`.
-`propor` leva ainda `"linhas": [{option_id | project, date, hours}]`, `"espelho": false` e
+`propor` leva ainda `"linhas": [{option_id | project, date, hours, comment?}]` (`comment` vai para as Observações do projeto; vazio mantém as do Suite), `"espelho": false` e
 `"nome": "texto"`. O mês tem de ser o que a página mostra; caso contrário a resposta é
 `ERR_MES_DIFERENTE` e nada é lido nem escrito.
 
@@ -68,7 +68,7 @@ Resultado com `"ok": true`, no campo `dados`:
 |---|---|
 | `estado` | `{ano, mes, projetos: N, loteEmCurso: boolean}` — `projetos` é a contagem, não a lista |
 | `projetos` | `[{option_id, nome, trancado}]` |
-| `ler` | `{ano, mes, linhas: [{option_id, nome, status, dias: {D: horas}, total}], totaisPorDia: {D: horas}}` |
+| `ler` | `{ano, mes, linhas: [{option_id, nome, status, dias: {D: horas}, total, comentario}], totaisPorDia: {D: horas}}` — `comentario` a partir da extensão 1.1.0 |
 | `propor`, fase `previa` | `{fase: 'previa', previa: {matriz, criar, atualizar, apagar, ignoradas, avisos, erros, bloqueio}}` — `criar`/`atualizar`/`apagar` são listas de `{option_id, projeto, dias}`; `bloqueio` é a mensagem em português ou `null` |
 | `propor`, fase `final` | `{fase: 'final', estado: 'aplicado' \| 'cancelado' \| 'erro', report?, motivo?, erro?}` — `report` só em `aplicado` (`{results, stopped, reconciliacao, skipped}`), `motivo` só em `cancelado`, `erro` (`{code, message}`) só em `erro` |
 | `aplicar` (uma só fase) | `{estado: 'aplicado' \| 'erro', report?, stopped?, erro?}` — sem `fase: 'previa'`; ver secção "aplicar" acima |
