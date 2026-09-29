@@ -8,7 +8,7 @@ test('há seis tools, nesta ordem, todas com schema de objeto e descrição que 
   for (const f of FERRAMENTAS) {
     assert.equal(f.inputSchema.type, 'object');
     assert.equal(typeof f.description, 'string');
-    assert.match(f.description, /nunca submete o mês, nunca muda o mês/i);
+    assert.match(f.description, /nunca submete as horas, nunca troca o mês selecionado/i);
   }
   assert.match(FERRAMENTAS.find((f) => f.name === 'propor').description, /nunca submete/i);
   assert.deepEqual(FERRAMENTAS.find((f) => f.name === 'propor').inputSchema.required, ['linhas']);
