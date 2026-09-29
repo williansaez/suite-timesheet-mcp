@@ -8,6 +8,7 @@ const CTX = {
   ano: 2026, mes: 9, diasNoMes: 30,
   projetos: [{ option_id: 101, nome: 'Alfa - Manutenção SAP', trancado: false }],
   lidoEm: '2026-09-09T10:00:00.000Z',
+  versaoExtensao: '1.1.0',
 };
 
 // Espera a ponte ficar viva por /mcp/estado, em vez de um sleep de duração fixa: o worker
