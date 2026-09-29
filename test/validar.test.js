@@ -64,3 +64,14 @@ test('comment que não é texto é recusado com o número da linha', () => {
     (e) => e.code === 'ERR_PROPOSTA' && /linha 1: comment tem de ser texto/.test(e.message),
   );
 });
+
+test('comment com "<" seguido de letra ou "&#" é recusado (o Suite ignora-o em silêncio)', () => {
+  for (const texto of ['<b>x</b>', 'a <!x', '&#65;']) {
+    assert.throws(
+      () => validarProposta({ linhas: [{ option_id: 101, date: '2026-09-02', hours: 1, comment: texto }] }),
+      (e) => e.code === 'ERR_PROPOSTA' && /linha 1: comment/.test(e.message),
+      texto,
+    );
+  }
+  assert.doesNotThrow(() => validarProposta({ linhas: [{ option_id: 101, date: '2026-09-02', hours: 1, comment: 'a < b & c; "ok"' }] }));
+});
