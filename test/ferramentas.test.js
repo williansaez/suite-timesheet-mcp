@@ -107,8 +107,9 @@ test('propor valida localmente, envia e devolve id, previa e bloqueio', async ()
   assert.equal(c.chamadas.length, 0);
   const r = await executar('propor', { linhas: [{ option_id: 101, date: '2026-09-02', hours: 0.5 }], nome: 's' }, c);
   assert.deepEqual(r, { id: 'p1', estado: 'previa', previa: { criar: [], bloqueio: null }, bloqueio: null });
-  assert.equal(c.chamadas[0][1].tipo, 'propor');
-  assert.equal(c.chamadas[0][1].nome, 's');
+  const enviado = c.chamadas.find((ch) => ch[0] === 'comando')[1];
+  assert.equal(enviado.tipo, 'propor');
+  assert.equal(enviado.nome, 's');
   const pendente = clienteFalso({ comando: () => ({ id: 'p2', estado: 'pendente', resultado: null }) });
   assert.deepEqual(await executar('propor', { linhas: [{ option_id: 101, date: '2026-09-02', hours: 0.5 }] }, pendente), { id: 'p2', estado: 'pendente' });
 });
@@ -220,17 +221,41 @@ test('propor: schema aceita comment opcional por linha e ler_mes fala das Observ
 const previaOk = () => ({ id: 'p9', estado: 'concluido', resultado: { ok: true, dados: { fase: 'previa', previa: { bloqueio: null } } } });
 const comComentario = { linhas: [{ option_id: 101, date: '2026-09-02', hours: 1, comment: 'Arranque' }] };
 
-test('propor com comment envia-o e avisa quando a extensão é anterior à 1.1.0', async () => {
+test('propor com comment (em sobregravar) envia-o e avisa quando a extensão é anterior à 1.1.0', async () => {
   const antiga = clienteFalso({ estado: { ponte: 'ligada', contexto: { ano: 2026, mes: 9 } }, comando: previaOk });
-  const r = await executar('propor', comComentario, antiga);
+  const r = await executar('propor', { ...comComentario, modo: 'sobregravar' }, antiga);
   assert.equal(antiga.chamadas.find((ch) => ch[0] === 'comando')[1].linhas[0].comment, 'Arranque');
   assert.match(r.aviso, /1\.1\.0/);
 });
 
-test('propor com comment e extensão 1.1.0 não avisa; sem comment nem consulta a versão', async () => {
+test('propor com comment e extensão 1.1.0 não avisa; versão desconhecida (sem contexto) deixa seguir', async () => {
   const nova = clienteFalso({ estado: { ponte: 'ligada', contexto: { versaoExtensao: '1.1.0' } }, comando: previaOk });
   assert.equal((await executar('propor', comComentario, nova)).aviso, undefined);
-  const sem = clienteFalso({ comando: previaOk });
-  await executar('propor', { linhas: [{ option_id: 101, date: '2026-09-02', hours: 1 }] }, sem);
-  assert.equal(sem.chamadas.some((ch) => ch[0] === 'estado'), false);
+  const semContexto = clienteFalso({ comando: previaOk });
+  const r = await executar('propor', { linhas: [{ option_id: 101, date: '2026-09-02', hours: 1 }] }, semContexto);
+  assert.equal(r.estado, 'previa');
+});
+
+test('propor: schema com modo (enum) e espelho ainda aceite', () => {
+  const props = FERRAMENTAS.find((f) => f.name === 'propor').inputSchema.properties;
+  assert.deepEqual(props.modo.enum, ['normal', 'somar', 'sobregravar']);
+  assert.ok(props.espelho);
+});
+
+const linhaSimples = { linhas: [{ option_id: 101, date: '2026-09-02', hours: 1 }] };
+
+test('propor recusa normal/somar com uma extensão 1.0 (faria outra coisa) e deixa sobregravar com espelho', async () => {
+  const antiga = () => clienteFalso({ estado: { ponte: 'ligada', contexto: { ano: 2026, mes: 9 } }, comando: previaOk });
+  await assert.rejects(executar('propor', linhaSimples, antiga()), { code: 'ERR_EXTENSAO_ANTIGA' });
+  await assert.rejects(executar('propor', { ...linhaSimples, modo: 'somar' }, antiga()), { code: 'ERR_EXTENSAO_ANTIGA' });
+  const c = antiga();
+  await executar('propor', { ...linhaSimples, modo: 'sobregravar' }, c);
+  const enviado = c.chamadas.find((ch) => ch[0] === 'comando')[1];
+  assert.deepEqual([enviado.modo, enviado.espelho], ['sobregravar', true]);
+});
+
+test('propor com a extensão 1.1 envia o modo tal e qual', async () => {
+  const c = clienteFalso({ estado: { ponte: 'ligada', contexto: { versaoExtensao: '1.1.0' } }, comando: previaOk });
+  await executar('propor', { ...linhaSimples, modo: 'somar' }, c);
+  assert.equal(c.chamadas.find((ch) => ch[0] === 'comando')[1].modo, 'somar');
 });

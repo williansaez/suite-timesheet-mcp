@@ -7,6 +7,7 @@ const ok = { linhas: [{ option_id: 101, date: '2026-09-02', hours: 0.5 }] };
 test('aceita uma proposta válida e normaliza espelho e nome', () => {
   assert.deepEqual(validarProposta(ok), {
     linhas: [{ option_id: 101, project: '', date: '2026-09-02', hours: 0.5 }],
+    modo: 'normal',
     espelho: false,
     nome: 'proposta do Claude',
   });
@@ -74,4 +75,25 @@ test('comment com "<" seguido de letra ou "&#" é recusado (o Suite ignora-o em 
     );
   }
   assert.doesNotThrow(() => validarProposta({ linhas: [{ option_id: 101, date: '2026-09-02', hours: 1, comment: 'a < b & c; "ok"' }] }));
+});
+
+test('modo: normal por defeito, somar/sobregravar aceites, espelho: true vale como sobregravar', () => {
+  assert.equal(validarProposta(ok).modo, 'normal');
+  assert.equal(validarProposta({ ...ok, modo: 'somar' }).modo, 'somar');
+  const sob = validarProposta({ ...ok, modo: 'sobregravar' });
+  assert.deepEqual([sob.modo, sob.espelho], ['sobregravar', true]);
+  assert.deepEqual([validarProposta({ ...ok, espelho: true }).modo], ['sobregravar']);
+  assert.throws(() => validarProposta({ ...ok, modo: 'apagar' }), { code: 'ERR_PROPOSTA' });
+});
+
+test('somar aceita horas negativas (múltiplos de 0,5, não 0); os outros modos não', () => {
+  const neg = { linhas: [{ option_id: 101, date: '2026-09-02', hours: -1.5 }] };
+  assert.equal(validarProposta({ ...neg, modo: 'somar' }).linhas[0].hours, -1.5);
+  assert.throws(() => validarProposta(neg), { code: 'ERR_PROPOSTA' });
+  assert.throws(() => validarProposta({ linhas: [{ option_id: 101, date: '2026-09-02', hours: 0 }], modo: 'somar' }), { code: 'ERR_PROPOSTA' });
+});
+
+test('sem linhas só em sobregravar (limpar o mês)', () => {
+  assert.deepEqual(validarProposta({ linhas: [], modo: 'sobregravar' }).linhas, []);
+  assert.throws(() => validarProposta({ linhas: [], modo: 'somar' }), { code: 'ERR_PROPOSTA' });
 });

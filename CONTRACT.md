@@ -15,7 +15,7 @@ Um serviço que implemente estas três rotas passa a poder pedir leituras e prop
 | `POST` | `/bridge/result/{id}` | a extensão publica o resultado do comando `id` |
 
 Comando: `{"id": "texto", "tipo": "estado" | "projetos" | "ler" | "propor" | "aplicar", "ano": 2026, "mes": 9}`.
-`propor` leva ainda `"linhas": [{option_id | project, date, hours, comment?}]` (`comment` vai para as Observações do projeto; vazio mantém as do Suite), `"espelho": false` e
+`propor` leva ainda `"linhas": [{option_id | project, date, hours, comment?}]` (`comment` vai para as Observações do projeto), `"modo": "normal" | "somar" | "sobregravar"` (defeito `normal`; ver a tabela de modos no `CONTRACT.md` da extensão; `"espelho": true`, da 1.0, vale como `sobregravar` e é sempre enviado junto para uma extensão 1.0 perceber o sobregravar) e
 `"nome": "texto"`. O mês tem de ser o que a página mostra; caso contrário a resposta é
 `ERR_MES_DIFERENTE` e nada é lido nem escrito.
 
@@ -79,6 +79,7 @@ Resultado com `"ok": true`, no campo `dados`:
 
 | código | motivo |
 |---|---|
+| `ERR_EXTENSAO_ANTIGA` | (só na tool `propor`) a extensão é anterior à 1.1.0 e o modo pedido não é `sobregravar`: a 1.0 faria outra coisa |
 | `ERR_COMANDO` | corpo do comando malformado (id/tipo/ano/mes/linhas inválidos) |
 | `ERR_MES_DIFERENTE` | o comando pede um mês diferente do que a página do Suite tem aberto |
 | `ERR_SEM_CONTEXTO` | a Folha de Horas do Suite ainda não foi aberta nesta sessão |
