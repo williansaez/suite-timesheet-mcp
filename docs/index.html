@@ -8,12 +8,16 @@
   <meta name="description" content="Servidor MCP para o Suite Timesheet Importer: um agente de IA preenche a Folha de Horas do Suite e tu só confirmas. Só local, sem telemetria." />
   <link rel="canonical" href="https://williansaez.github.io/suite-timesheet-mcp/" />
   <link rel="icon" type="image/png" href="media/icone.png" />
+  <link rel="apple-touch-icon" href="media/icone.png" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pt_PT" />
   <meta property="og:title" content="suite-timesheet-mcp · A tua Folha de Horas, mais inteligente" />
   <meta property="og:description" content="Conta ao teu agente o que fizeste esta semana. Ele preenche a folha e tu só confirmas." />
   <meta property="og:url" content="https://williansaez.github.io/suite-timesheet-mcp/" />
   <meta property="og:image" content="https://williansaez.github.io/suite-timesheet-mcp/media/fecho.png" />
+  <meta property="og:image:width" content="1600" />
+  <meta property="og:image:height" content="900" />
+  <meta property="og:image:alt" content="Suite Timesheet Importer 1.1.0 e suite-timesheet-mcp 1.1.0. O Suite de sempre, a tecnologia de hoje." />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -50,7 +54,7 @@
     ::selection { background: rgba(42,127,186,0.25); }
     :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; border-radius: 6px; }
     a { color: var(--accent); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
-    a:hover { color: var(--accent-2); }
+    a:hover { color: var(--accent); text-decoration-thickness: 2px; }
     h1, h2, h3 { font-weight: 900; letter-spacing: -0.02em; line-height: 1.08; margin: 0; text-wrap: balance; }
     h2 { font-size: clamp(1.8rem, 3.4vw, 2.7rem); }
     h3 { font-size: 1.2rem; font-weight: 700; line-height: 1.3; }
@@ -80,7 +84,9 @@
     .lede + .lede { margin-top: 10px; font-size: 1rem; color: var(--muted); }
     .acoes { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
     .chip { display: inline-flex; align-items: center; gap: 12px; max-width: 100%; padding: 8px 8px 8px 18px; background: var(--code-bg); color: var(--code-text); border-radius: 12px; font: 700 15px/1.3 var(--mono); }
-    .chip code { all: unset; overflow-wrap: anywhere; }
+    .chip { flex-wrap: wrap; }
+    .chip code { all: unset; white-space: nowrap; }
+    @media (max-width: 400px) { .chip { font-size: 13px; padding-left: 14px; } }
     .btn { display: inline-flex; align-items: center; padding: 13px 18px; border-radius: 12px; font-weight: 700; font-size: 15px; text-decoration: none; color: var(--text); background: var(--card); border: 1px solid var(--line); transition: border-color 200ms, transform 300ms var(--ease); }
     .btn:hover { color: var(--text); border-color: var(--accent-2); transform: translateY(-1px); }
     .factos { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 6px 22px; font: 13px/1.4 var(--mono); color: var(--muted); }
@@ -88,6 +94,8 @@
     .hero figure { margin: 0; }
     .player { border-radius: 14px; overflow: hidden; background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); }
     .player video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+    .player:has(video:focus-visible) { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+    .player video:focus-visible { outline: none; }
 
     section { padding: clamp(56px, 9vh, 104px) 0; border-top: 1px solid var(--line); }
     .intro { margin-top: 16px; color: var(--soft); }
@@ -95,17 +103,24 @@
     .num { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; font: 700 14px/1 var(--sans); flex: none; }
 
     .code { position: relative; margin-top: 14px; }
-    .code pre { margin: 0; padding: 16px 20px; padding-right: 104px; background: var(--code-bg); color: var(--code-text); border-radius: 12px; overflow-x: auto; font-size: 14px; line-height: 1.6; }
+    .code pre { margin: 0; padding: 16px 20px; padding-right: 128px; background: var(--code-bg); color: var(--code-text); border-radius: 12px; overflow-x: auto; font-size: 14px; line-height: 1.6; }
     .code pre code { color: inherit; background: none; padding: 0; font-size: inherit; overflow-wrap: normal; }
     .code pre .c { color: var(--code-muted); }
-    .copy { font: 700 12px/1 var(--sans); color: #fff; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 10px 12px; min-width: 84px; cursor: pointer; transition: background 200ms, border-color 200ms; }
-    .copy:hover { background: rgba(255,255,255,0.16); }
+    .copy { font: 700 12px/1 var(--sans); color: #fff; background: #2b3138; border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 10px 12px; min-width: 104px; cursor: pointer; transition: background 200ms, border-color 200ms; }
+    .copy:hover { background: #363d45; }
+    html:not(.js) .copy { display: none; }
+    html:not(.js) .code pre { padding-right: 20px; }
     .copy[data-state="ok"] { border-color: #3fb950; color: #7ee787; }
     .copy[data-state="manual"] { border-color: var(--warn-line); color: var(--warn-line); }
     .code .copy { position: absolute; top: 9px; right: 9px; }
+    @media (max-width: 560px) {
+      .code { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+      .code pre { align-self: stretch; padding-right: 20px; }
+      .code .copy { position: static; }
+    }
 
     .rolar { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 15.5px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 24px; font-size: 15.5px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
     th, td { text-align: left; vertical-align: top; padding: 12px 16px; border-bottom: 1px solid var(--line); }
     tr:last-child td { border-bottom: 0; }
     th { font: 700 12px/1.4 var(--mono); letter-spacing: 0.03em; color: var(--muted); background: #f7fafc; }
@@ -172,6 +187,8 @@
     html:not(.js) [role="tablist"] { display: none; }
     [role="tab"] { flex: none; font: 700 14px/1 var(--sans); color: var(--soft); background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 14px; cursor: pointer; }
     [role="tab"][aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+    [role="tab"]:focus-visible { outline-offset: -3px; }
+    @media (max-width: 560px) { [role="tablist"] { flex-wrap: wrap; overflow: visible; } }
     [role="tabpanel"] { padding-top: 6px; }
     [role="tabpanel"] > h4 { margin: 18px 0 0; font-size: 1rem; }
     .js [role="tabpanel"] > h4 { display: none; }
@@ -183,15 +200,22 @@
     details { margin-top: 8px; }
     summary { cursor: pointer; font: 900 clamp(1.8rem, 3.4vw, 2.7rem)/1.1 var(--sans); letter-spacing: -0.02em; list-style: none; }
     summary::-webkit-details-marker { display: none; }
-    summary::after { content: " +"; color: var(--accent); }
-    details[open] summary::after { content: " −"; }
+    summary h2 { display: inline; font: inherit; }
+    summary::after { content: " +" / ""; color: var(--accent); }
+    details[open] summary::after { content: " −" / ""; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     td code { white-space: nowrap; }
 
     @media (max-width: 900px) {
       .hero { grid-template-columns: minmax(0, 1fr); }
       .usar { grid-template-columns: minmax(0, 1fr); }
       .passos { grid-template-columns: minmax(0, 1fr); }
-      nav.top ul { display: none; }
+      nav.top .wrap { gap: 14px; }
+      nav.top ul { gap: 16px; overflow-x: auto; scrollbar-width: none; padding-right: 24px; -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
+      nav.top ul::-webkit-scrollbar { display: none; }
+      nav.top ul a { white-space: nowrap; font-size: 13px; }
+      nav.top ul li:last-child { display: none; }
+      .marca .nome { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -204,7 +228,7 @@
   <div class="traco" aria-hidden="true"></div>
   <nav class="top" aria-label="Principal">
     <div class="wrap">
-      <a class="marca" href="#topo"><img src="media/icone.png" alt="" width="30" height="30" />suite-timesheet-mcp <span class="pill" data-version="1.1.0">1.1.0</span></a>
+      <a class="marca" href="#topo"><img src="media/icone.png" alt="" width="30" height="30" /><span class="nome">suite-timesheet-mcp</span> <span class="pill" data-version="1.1.0">1.1.0</span></a>
       <ul>
         <li><a href="#como">Como funciona</a></li>
         <li><a href="#garantias">Garantias</a></li>
@@ -251,16 +275,16 @@
         <div class="passos">
           <div class="card">
             <h3><span class="num">1</span>Pedes</h3>
-            <p class="balao">Lança 4 h de hoje no Alfa: migração de dados.</p>
+            <p class="balao">Lança 4 h hoje no Alfa: migração de dados.</p>
             <p>Em linguagem natural, no chat do teu agente.</p>
           </div>
           <div class="card">
             <h3><span class="num">2</span>O agente propõe</h3>
-            <p>Lê o mês aberto, os projetos do teu dropdown e o que já está lançado, e monta a proposta com <code>propor</code>. Abre o painel da extensão com a pré-visualização. Nada é escrito.</p>
+            <p>Lê o mês aberto, os projetos do teu dropdown e o que já está lançado, e monta a proposta com <code>propor</code>. A extensão abre o painel com a pré-visualização. Nada é escrito.</p>
           </div>
           <div class="card">
             <h3><span class="num">3</span>Tu aprovas</h3>
-            <p>Clicas Aplicar no painel, ou aprovas a tool <code>aplicar</code> no teu cliente MCP. Só aí as horas são escritas.</p>
+            <p>Clicas em Aplicar no painel, ou aprovas a tool <code>aplicar</code> no teu cliente MCP. Só aí as horas são escritas.</p>
             <span class="aprovar" aria-hidden="true">✓ Aplicar</span>
           </div>
         </div>
@@ -284,8 +308,8 @@
         <p class="intro">O que este servidor nunca faz. Detalhes, e a forma de verificar cada afirmação, em <a href="https://github.com/williansaez/suite-timesheet-mcp/blob/main/SECURITY.md">SECURITY.md</a>.</p>
         <div class="garantias">
           <div class="card"><h3>Nunca fala com o Suite</h3><p>Quem lê e escreve é a extensão, no teu browser, com a tua sessão.</p></div>
-          <div class="card"><h3>Nunca escreve sem ti</h3><p>Cada lançamento é uma proposta. Só é escrito quando clicas Aplicar no painel ou aprovas a tool <code>aplicar</code>.</p></div>
-          <div class="card"><h3>Nunca submete meses</h3><p>Nem muda o mês aberto na página. Escreve só no mês que tens à frente.</p></div>
+          <div class="card"><h3>Nunca escreve sem ti</h3><p>Cada lançamento é uma proposta. Só é escrito quando clicas em Aplicar no painel ou aprovas a tool <code>aplicar</code>.</p></div>
+          <div class="card"><h3>Nunca submete meses</h3><p>Nem muda o mês aberto na página. As horas só são escritas no mês que tens à frente.</p></div>
           <div class="card"><h3>Só local</h3><p>Escuta apenas em <code>127.0.0.1</code>, guarda tudo em memória e não tem telemetria.</p></div>
         </div>
       </div>
@@ -294,15 +318,15 @@
     <section id="instalar">
       <div class="wrap">
         <h2>Instalar</h2>
-        <p class="intro">Precisas de Node.js ≥ 20, de Chrome ou Edge com a extensão Suite Timesheet Importer, e da Folha de Horas do Suite aberta com sessão válida.</p>
+        <p class="intro">Precisas de Node.js ≥ 20, de Chrome ou Edge com a extensão <a href="https://microsoftedge.microsoft.com/addons/detail/suite-timesheet-importer/ccmnogdllbomjogpddfedgolgeobhdef">Suite Timesheet Importer</a> (1.1.0 ou mais recente), e da Folha de Horas do Suite aberta com sessão válida.</p>
         <div class="instalar">
           <div>
             <h3><span class="num">1</span>Ligar a ponte na extensão</h3>
-            <p>Nas <b>Opções</b> da extensão, liga <b>Ligação ao servidor local (ponte MCP)</b>, clica em <b>Guardar</b> e aceita a permissão para <code>http://127.0.0.1/*</code>. Depois recarrega a Folha de Horas. É feito uma vez, à mão: sem isto a extensão nunca toca na rede local.</p>
+            <p>Nas <b>Opções</b> da extensão (clique direito no ícone da extensão → Opções), liga <b>Ligação ao servidor local (ponte MCP)</b>, clica em <b>Guardar</b> e aceita a permissão para <code>http://127.0.0.1/*</code>. Depois recarrega a Folha de Horas. Só tens de fazer isto uma vez. Sem este passo, a extensão nunca toca na rede local.</p>
           </div>
           <div>
             <h3><span class="num">2</span>Registar o servidor no teu agente</h3>
-            <p>Não é preciso clonar nada: o <code>npx</code> descarrega o pacote e corre-o. <code>@1</code> fixa a versão principal, por isso recebes as correções 1.x e nunca uma versão incompatível.</p>
+            <p>Não é preciso clonar nada: o <code>npx</code> descarrega o pacote e corre-o. <code>@1</code> fixa a versão principal, por isso recebes as atualizações 1.x e nunca uma versão incompatível.</p>
             <div role="tablist" aria-label="Agente">
               <button role="tab" type="button" id="t-copilot" aria-controls="p-copilot" aria-selected="true">Copilot (VS Code)</button>
               <button role="tab" type="button" id="t-code" aria-controls="p-code" aria-selected="false" tabindex="-1">Claude Code</button>
@@ -312,15 +336,18 @@
             <div role="tabpanel" id="p-copilot" aria-labelledby="t-copilot">
               <h4>Copilot (VS Code)</h4>
               <div class="code"><pre><code>code --add-mcp '{"name":"suite-timesheet","command":"npx","args":["-y","suite-timesheet-mcp@1"]}'</code></pre><button class="copy" type="button" data-copy-pre>Copiar</button></div>
-              <p>Depois recarrega a janela. As tools aparecem no modo <b>Agent</b> do Copilot.</p>
+              <p>No Windows (cmd ou PowerShell), as aspas são outras:</p>
+              <div class="code"><pre><code>code --add-mcp "{\"name\":\"suite-timesheet\",\"command\":\"npx\",\"args\":[\"-y\",\"suite-timesheet-mcp@1\"]}"</code></pre><button class="copy" type="button" data-copy-pre>Copiar</button></div>
+              <p>Ao primeiro arranque o VS Code pede para confiares no servidor: aceita. As tools aparecem no modo <b>Agent</b> do Copilot; se não aparecerem, recarrega a janela. No macOS, se o comando <code>code</code> não existir: Paleta de Comandos → <i>Shell Command: Install 'code' command in PATH</i>.</p>
             </div>
             <div role="tabpanel" id="p-code" aria-labelledby="t-code">
               <h4>Claude Code</h4>
               <div class="code"><pre><code>claude mcp add --scope user suite-timesheet -- npx -y suite-timesheet-mcp@1</code></pre><button class="copy" type="button" data-copy-pre>Copiar</button></div>
+              <p>Abre uma sessão nova do Claude Code e confirma com <code>/mcp</code> que <code>suite-timesheet</code> aparece ligado.</p>
             </div>
             <div role="tabpanel" id="p-desktop" aria-labelledby="t-desktop">
               <h4>Claude Desktop (inclui Cowork)</h4>
-              <p>Em Definições → Programador → Editar configuração (<code>~/Library/Application Support/Claude/claude_desktop_config.json</code> no macOS, <code>%APPDATA%\Claude\claude_desktop_config.json</code> no Windows):</p>
+              <p>No menu Claude da barra do sistema: Definições → Programador → Editar configuração (<code>~/Library/Application Support/Claude/claude_desktop_config.json</code> no macOS, <code>%APPDATA%\Claude\claude_desktop_config.json</code> no Windows):</p>
               <div class="code"><pre><code>{
   "mcpServers": {
     "suite-timesheet": {
@@ -329,7 +356,7 @@
     }
   }
 }</code></pre><button class="copy" type="button" data-copy-pre>Copiar</button></div>
-              <p>Reinicia o Claude Desktop.</p>
+              <p>Se o ficheiro já tiver outros servidores, junta só a entrada <code>"suite-timesheet"</code> dentro de <code>mcpServers</code>, sem apagar as outras. Depois reinicia o Claude Desktop.</p>
             </div>
             <div role="tabpanel" id="p-outros" aria-labelledby="t-outros">
               <h4>Outros agentes</h4>
@@ -341,7 +368,7 @@
           <div>
             <h3><span class="num">3</span>Verificar</h3>
             <p>Pede ao agente: <i>"consulta o estado da ponte do Suite Timesheet"</i>. A tool <code>estado</code> deve responder com a ponte ligada e o mês visível na página. As Opções da extensão passam a mostrar "Agente ligado há N s".</p>
-            <p class="warn"><b>Mantém a aprovação manual da tool <code>aplicar</code>.</b> Com ela em aprovação automática, qualquer proposta é escrita sem mais nenhuma confirmação.</p>
+            <p class="warn"><b>Mantém a aprovação manual da tool <code>aplicar</code>.</b> Quando o cliente perguntar, escolhe permitir uma vez, nunca permitir sempre. Com ela em aprovação automática, qualquer proposta é escrita sem mais nenhuma confirmação.</p>
           </div>
         </div>
       </div>
@@ -354,19 +381,19 @@
         <div class="usar">
           <div>
             <h3>Pedidos de exemplo</h3>
-            <div class="rolar"><table>
+            <div class="rolar" tabindex="0" role="region" aria-label="Pedidos de exemplo"><table>
               <thead><tr><th scope="col">pedes</th><th scope="col">tool</th></tr></thead>
               <tbody>
                 <tr><td>Quantas horas tenho lançadas este mês no Suite?</td><td><code>ler_mes</code></td></tr>
                 <tr><td>Que projetos tenho disponíveis?</td><td><code>projetos</code></td></tr>
                 <tr><td>Lança 8 h no Alfa de segunda a sexta desta semana.</td><td><code>propor</code>, depois <code>aplicar</code></td></tr>
-                <tr><td>Soma 2 h a hoje no Alfa, com a nota "reunião de arranque".</td><td><code>propor</code> em <code>somar</code></td></tr>
+                <tr><td>Soma 2 h hoje no Alfa, com a nota "reunião de arranque".</td><td><code>propor</code> (modo <code>somar</code>), depois <code>aplicar</code></td></tr>
               </tbody>
             </table></div>
           </div>
           <div>
             <h3>Modos do <code>propor</code></h3>
-            <div class="rolar"><table>
+            <div class="rolar" tabindex="0" role="region" aria-label="Modos do propor"><table>
               <thead><tr><th scope="col">modo</th><th scope="col">o que vem nas linhas</th><th scope="col">o que não vem</th></tr></thead>
               <tbody>
                 <tr><td><code>normal</code></td><td>fica com o valor pedido</td><td>fica como está</td></tr>
@@ -388,33 +415,35 @@
           <li class="card" data-tool="estado"><b>estado</b><span>Ponte ligada? Mês visível, nº de projetos, lote a correr.</span></li>
           <li class="card" data-tool="projetos"><b>projetos</b><span>Projetos do dropdown da página: <code>option_id</code>, nome, trancado.</span></li>
           <li class="card" data-tool="ler_mes"><b>ler_mes</b><span>Horas e Observações já lançadas no mês visível.</span></li>
-          <li class="card" data-tool="propor"><b>propor</b><span>Calcula o plano, abre o painel com a pré-visualização e devolve um <code>id</code>. Nada é escrito.</span></li>
+          <li class="card" data-tool="propor"><b>propor</b><span>Calcula o plano, abre o painel e devolve a pré-visualização e um <code>id</code>. Nada é escrito.</span></li>
           <li class="card" data-tool="aplicar"><b>aplicar</b><span>Escreve a proposta <code>id</code> no Suite através da extensão. Mantém-na em aprovação manual.</span></li>
-          <li class="card" data-tool="resultado"><b>resultado</b><span>Espera pela decisão: aplicado, cancelado, erro ou pendente.</span></li>
+          <li class="card" data-tool="resultado"><b>resultado</b><span>Espera pela decisão (no painel ou com <code>aplicar</code>): aplicado, cancelado, erro ou pendente.</span></li>
         </ul>
       </div>
     </section>
 
-    <section>
+    <section aria-labelledby="erros-titulo">
       <div class="wrap">
         <details id="erros">
-          <summary>Erros</summary>
-          <div class="rolar"><table>
+          <summary><h2 id="erros-titulo">Erros</h2></summary>
+          <div class="rolar" tabindex="0" role="region" aria-label="Erros e o que fazer"><table>
             <thead><tr><th scope="col">erro</th><th scope="col">o que fazer</th></tr></thead>
             <tbody>
               <tr><td><code>ERR_SERVE_EM_BAIXO</code></td><td>O serviço local não responde. Reinicia o cliente MCP, que o arranca sozinho.</td></tr>
               <tr><td><code>ERR_SEM_CHROME</code></td><td>Abre a Folha de Horas e confirma que a ponte está ligada nas Opções.</td></tr>
-              <tr><td><code>ERR_SEM_CONTEXTO</code></td><td>Recarrega a Folha de Horas: o serviço reiniciou depois de a página carregar.</td></tr>
-              <tr><td><code>ERR_SEM_ABA</code></td><td>Não há nenhuma aba do Suite aberta. Abre-a ou recarrega-a.</td></tr>
+              <tr><td><code>ERR_SEM_CONTEXTO</code></td><td>Recarrega a Folha de Horas: o serviço ainda não recebeu o mês da página (por exemplo, reiniciou depois de a página carregar).</td></tr>
+              <tr><td><code>ERR_SEM_ABA</code></td><td>Não há nenhum separador do Suite aberto. Abre-o ou recarrega-o.</td></tr>
               <tr><td><code>ERR_MES_DIFERENTE</code></td><td>Muda o mês na página. O MCP nunca o muda por ti.</td></tr>
-              <tr><td><code>ERR_OCUPADO</code></td><td>Há uma proposta à espera no painel. Aplica-a ou cancela-a primeiro.</td></tr>
+              <tr><td><code>ERR_OCUPADO</code></td><td>Há uma proposta à espera no painel ou a ser calculada. Aplica-a ou cancela-a primeiro.</td></tr>
               <tr><td><code>ERR_LOTE_A_CORRER</code></td><td>Já está um lote a escrever no Suite. Espera que termine.</td></tr>
-              <tr><td><code>ERR_SESSION</code></td><td>A sessão do Suite expirou. Entra outra vez.</td></tr>
+              <tr><td><code>ERR_SESSION</code></td><td>A sessão do Suite expirou. Inicia sessão outra vez.</td></tr>
               <tr><td><code>ERR_PROPOSTA_DESCONHECIDA</code></td><td>O <code>id</code> passado a <code>aplicar</code> não corresponde a nenhuma proposta pendente.</td></tr>
-              <tr><td><code>ERR_EXTENSAO_ANTIGA</code></td><td>Atualiza a extensão para a 1.1.0, ou usa <code>modo: "sobregravar"</code>.</td></tr>
+              <tr><td><code>ERR_EXTENSAO_ANTIGA</code></td><td>Atualiza a extensão para a 1.1.0 ou mais recente, ou usa <code>modo: "sobregravar"</code>.</td></tr>
+              <tr><td><code>ERR_PROPOSTA</code></td><td>A proposta tem dados inválidos (data fora do mês visível, horas fora de 0,5–23,5 ou sem projeto). O agente corrige-a e propõe de novo.</td></tr>
+              <tr><td><code>ERR_EXPIRADO</code></td><td>A extensão não respondeu a tempo. Confirma que a Folha de Horas está aberta e tenta de novo.</td></tr>
             </tbody>
           </table></div>
-          <p class="nota">Lista completa em <a href="https://github.com/williansaez/suite-timesheet-mcp/blob/main/CONTRACT.md">CONTRACT.md</a>.</p>
+          <p class="nota">Mais códigos, e o que cada um significa, em <a href="https://github.com/williansaez/suite-timesheet-mcp/blob/main/CONTRACT.md">CONTRACT.md</a>.</p>
         </details>
       </div>
     </section>
@@ -430,6 +459,8 @@
       </div>
     </section>
   </main>
+
+  <p class="sr" aria-live="polite" id="aviso-copiar"></p>
 
   <footer>
     <div class="wrap">
@@ -452,6 +483,7 @@
     function marcar(botao, estado, texto) {
       botao.dataset.state = estado;
       botao.textContent = texto;
+      document.getElementById('aviso-copiar').textContent = estado === 'ok' ? 'Copiado.' : 'Texto selecionado: copia-o com o atalho do teu sistema.';
       clearTimeout(botao._t);
       botao._t = setTimeout(() => { delete botao.dataset.state; botao.textContent = 'Copiar'; }, 2400);
     }
