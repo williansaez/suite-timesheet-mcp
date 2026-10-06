@@ -55,7 +55,7 @@ Detalhes e forma de verificar cada afirmação: [SECURITY.md](SECURITY.md).
 ## Requisitos
 
 - Node.js ≥ 20 (`node -v`).
-- Chrome ou Edge com a extensão Suite Timesheet Importer instalada.
+- Microsoft Edge com a extensão [Suite Timesheet Importer](https://microsoftedge.microsoft.com/addons/detail/suite-timesheet-importer/ccmnogdllbomjogpddfedgolgeobhdef) instalada.
 - A Folha de Horas do Suite aberta, com sessão válida.
 
 ## Instalação
