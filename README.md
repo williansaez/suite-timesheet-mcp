@@ -19,6 +19,10 @@
 </p>
 
 <p align="center">
+  <a href="https://williansaez.github.io/suite-timesheet-mcp/"><strong>Site do projeto</strong></a>
+</p>
+
+<p align="center">
   <a href="docs/media/lancamento-1.1.0.mp4">
     <img src="docs/media/agente.gif" alt="Um agente recebe um pedido, propõe o lançamento e pede aprovação" width="820">
   </a>
