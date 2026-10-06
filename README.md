@@ -293,7 +293,7 @@ node --test
 
 Para usar a cópia local num cliente, troca o comando `npx …` por
 `node /caminho/para/suite-timesheet-mcp/mcp.js`. Também dá para instalar diretamente de uma tag do
-GitHub, sem npm: `npx -y github:williansaez/suite-timesheet-mcp#v1.1.0` (precisa de `git`).
+GitHub, sem npm: `npx -y github:williansaez/suite-timesheet-mcp#v1.1.1` (precisa de `git`).
 
 ## Licença
 
