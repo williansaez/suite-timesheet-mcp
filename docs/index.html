@@ -132,10 +132,27 @@
     .passos p { color: var(--soft); font-size: 15.5px; }
     .balao { font-size: 17px; line-height: 1.45; color: var(--text); background: #eaf3fa; border: 1px solid #c4dcee; border-radius: 16px 16px 16px 4px; padding: 14px 18px; }
     .aprovar { justify-self: start; font: 700 14px/1 var(--sans); color: #fff; background: var(--ok); border-radius: 8px; padding: 10px 16px; }
-    .diagrama { margin-top: 28px; overflow-x: auto; }
-    .diagrama svg { display: block; min-width: 760px; width: 100%; height: auto; }
-    .diagrama text { font-family: var(--sans); fill: var(--text); }
-    .diagrama .m { font-family: var(--mono); fill: var(--muted); }
+    /* Fluxo: horizontal em ecrãs largos, vertical abaixo de 1200 px (setas rodam com o eixo). */
+    .fluxo { margin-top: 28px; display: flex; align-items: stretch; padding: 28px; }
+    .no { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 4px; text-align: center; padding: 14px 10px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; }
+    .no b { font-weight: 700; font-size: 16px; }
+    .no span { font: 12px/1.4 var(--mono); color: var(--muted); }
+    .no .painel { margin-top: 8px; padding: 5px 8px; border: 1px dashed var(--accent-2); border-radius: 8px; color: var(--soft); font: 700 12px/1.3 var(--sans); }
+    .no.largo { flex-grow: 1.5; }
+    .no.medio { flex-grow: 1.25; }
+    .lig { flex: 0 0 64px; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; font: 11px/1 var(--mono); color: var(--muted); }
+    .lig i { position: relative; display: block; width: 100%; height: 2px; background: var(--accent-2); }
+    .lig i::after { content: ""; position: absolute; top: 50%; right: -1px; transform: translateY(-50%); border-left: 9px solid var(--accent-2); border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+    .lig.volta i::after { right: auto; left: -1px; border-left: 0; border-right: 9px solid var(--accent-2); }
+    @media (max-width: 1200px) {
+      .fluxo { flex-direction: column; max-width: 380px; margin-inline: auto; padding: 22px; }
+      .no { flex: none; }
+      .lig { flex: none; height: 56px; }
+      .lig i { position: absolute; left: 50%; top: 0; width: 2px; height: 100%; transform: translateX(-50%); }
+      .lig span { position: absolute; left: calc(50% + 14px); top: 50%; transform: translateY(-50%); }
+      .lig i::after { top: auto; bottom: -1px; right: auto; left: 50%; transform: translateX(-50%); border: 0; border-top: 9px solid var(--accent-2); border-left: 5px solid transparent; border-right: 5px solid transparent; }
+      .lig.volta i::after { bottom: auto; top: -1px; left: 50%; border-top: 0; border-bottom: 9px solid var(--accent-2); border-left: 5px solid transparent; border-right: 5px solid transparent; }
+    }
     .garantias { margin-top: 32px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
     @media (max-width: 1100px) { .garantias { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 560px) { .garantias { grid-template-columns: minmax(0, 1fr); } }
@@ -241,47 +258,16 @@
             <span class="aprovar" aria-hidden="true">✓ Aplicar</span>
           </div>
         </div>
-        <div class="diagrama card" role="img" aria-label="O agente fala por stdio com o mcp.js, que fala por HTTP local com o serve.js em 127.0.0.1:18765. A extensão no browser faz long-poll ao serve.js, lê e escreve a Folha de Horas do Suite com a tua sessão, e mostra o painel com a pré-visualização e o botão Aplicar.">
-          <svg viewBox="0 6 960 228" aria-hidden="true">
-            <defs>
-              <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2a7fba" /></marker>
-            </defs>
-            <g fill="#fff" stroke="#d8e0e8" stroke-width="1.5">
-              <rect x="10" y="30" width="150" height="76" rx="12" />
-              <rect x="200" y="30" width="150" height="76" rx="12" />
-              <rect x="390" y="30" width="170" height="76" rx="12" stroke="#1f6699" stroke-width="2" />
-              <rect x="600" y="30" width="150" height="76" rx="12" />
-              <rect x="790" y="30" width="160" height="76" rx="12" />
-              <rect x="560" y="166" width="230" height="64" rx="12" />
-            </g>
-            <g stroke="#2a7fba" stroke-width="2" fill="none" marker-end="url(#seta)">
-              <line x1="160" y1="68" x2="198" y2="68" />
-              <line x1="350" y1="68" x2="388" y2="68" />
-              <line x1="600" y1="68" x2="562" y2="68" />
-              <line x1="750" y1="68" x2="788" y2="68" />
-            </g>
-            <line x1="675" y1="106" x2="675" y2="166" stroke="#2a7fba" stroke-width="2" stroke-dasharray="4 4" />
-            <g font-size="16" font-weight="700" text-anchor="middle">
-              <text x="85" y="64">Agente</text>
-              <text x="275" y="64">mcp.js</text>
-              <text x="475" y="64">serve.js</text>
-              <text x="675" y="64">Extensão</text>
-              <text x="870" y="64">Folha de Horas</text>
-              <text x="675" y="194">Painel</text>
-            </g>
-            <g font-size="12" text-anchor="middle" class="m">
-              <text x="85" y="86" class="m">cliente MCP</text>
-              <text x="275" y="86" class="m">servidor MCP</text>
-              <text x="475" y="86" class="m">127.0.0.1:18765</text>
-              <text x="675" y="86" class="m">no teu browser</text>
-              <text x="870" y="86" class="m">do Suite</text>
-              <text x="675" y="214" class="m">pré-visualização e Aplicar</text>
-              <text x="179" y="22" class="m">stdio</text>
-              <text x="369" y="22" class="m">HTTP</text>
-              <text x="580" y="22" class="m">long-poll</text>
-              <text x="769" y="22" class="m">sessão</text>
-            </g>
-          </svg>
+        <div class="fluxo card" role="img" aria-label="O agente fala por stdio com o mcp.js, que fala por HTTP local com o serve.js em 127.0.0.1:18765. A extensão no teu browser faz long-poll ao serve.js, mostra o painel com a pré-visualização e o botão Aplicar, e lê e escreve a Folha de Horas do Suite com a tua sessão.">
+          <div class="no"><b>Agente</b><span>cliente MCP</span></div>
+          <div class="lig"><span>stdio</span><i></i></div>
+          <div class="no"><b>mcp.js</b><span>servidor MCP</span></div>
+          <div class="lig"><span>HTTP</span><i></i></div>
+          <div class="no"><b>serve.js</b><span>127.0.0.1:18765</span></div>
+          <div class="lig volta"><span>long-poll</span><i></i></div>
+          <div class="no largo"><b>Extensão</b><span>no teu browser</span><span class="painel">painel com Aplicar</span></div>
+          <div class="lig"><span>sessão</span><i></i></div>
+          <div class="no medio"><b>Folha de Horas</b><span>do Suite</span></div>
         </div>
       </div>
     </section>
