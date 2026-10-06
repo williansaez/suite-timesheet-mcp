@@ -5,7 +5,7 @@
   "description": "Servidor MCP para o Suite Timesheet Importer: um agente de IA lê e propõe horas; a extensão escreve depois de confirmação humana.",
   "license": "SEE LICENSE IN LICENSE",
   "author": "Willian Saez",
-  "homepage": "https://github.com/williansaez/suite-timesheet-mcp#readme",
+  "homepage": "https://williansaez.github.io/suite-timesheet-mcp/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/williansaez/suite-timesheet-mcp.git"
