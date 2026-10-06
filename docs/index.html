@@ -156,8 +156,18 @@
     [role="tabpanel"] p { margin-top: 12px; color: var(--soft); font-size: 15.5px; }
     .nota { margin-top: 16px; font-size: 15px; color: var(--muted); }
 
+    .usar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+    .usar h3 { margin-top: 28px; }
+    details { margin-top: 8px; }
+    summary { cursor: pointer; font: 900 clamp(1.8rem, 3.4vw, 2.7rem)/1.1 var(--sans); letter-spacing: -0.02em; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: " +"; color: var(--accent); }
+    details[open] summary::after { content: " −"; }
+    td code { white-space: nowrap; }
+
     @media (max-width: 900px) {
       .hero { grid-template-columns: minmax(0, 1fr); }
+      .usar { grid-template-columns: minmax(0, 1fr); }
       .passos { grid-template-columns: minmax(0, 1fr); }
       nav.top ul { display: none; }
     }
@@ -347,7 +357,38 @@
       </div>
     </section>
 
-    <!-- @usar -->
+    <section id="usar">
+      <div class="wrap">
+        <h2>Usar</h2>
+        <p class="intro">Lançar horas tem sempre duas fases: <code>propor</code> calcula o plano e abre o painel; depois confirmas no painel ou aprovas <code>aplicar</code>. Linhas trancadas e propostas bloqueadas são sempre recusadas pela extensão.</p>
+        <div class="usar">
+          <div>
+            <h3>Pedidos de exemplo</h3>
+            <div class="rolar"><table>
+              <thead><tr><th scope="col">pedes</th><th scope="col">tool</th></tr></thead>
+              <tbody>
+                <tr><td>Quantas horas tenho lançadas este mês no Suite?</td><td><code>ler_mes</code></td></tr>
+                <tr><td>Que projetos tenho disponíveis?</td><td><code>projetos</code></td></tr>
+                <tr><td>Lança 8 h no Alfa de segunda a sexta desta semana.</td><td><code>propor</code>, depois <code>aplicar</code></td></tr>
+                <tr><td>Soma 2 h a hoje no Alfa, com a nota "reunião de arranque".</td><td><code>propor</code> em <code>somar</code></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div>
+            <h3>Modos do <code>propor</code></h3>
+            <div class="rolar"><table>
+              <thead><tr><th scope="col">modo</th><th scope="col">o que vem nas linhas</th><th scope="col">o que não vem</th></tr></thead>
+              <tbody>
+                <tr><td><code>normal</code></td><td>fica com o valor pedido</td><td>fica como está</td></tr>
+                <tr><td><code>somar</code></td><td>Suite + pedido (negativos subtraem)</td><td>fica como está</td></tr>
+                <tr><td><code>sobregravar</code></td><td>fica com o valor pedido</td><td>é apagado</td></tr>
+              </tbody>
+            </table></div>
+            <p class="nota">Propor duas vezes em <code>somar</code> duplica. Mais de 8 h num dia é só aviso. Os modos <code>normal</code> e <code>somar</code> e os comentários precisam da extensão ≥ 1.1.0.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section id="tools">
       <div class="wrap">
@@ -364,7 +405,29 @@
       </div>
     </section>
 
-    <!-- @erros -->
+    <section>
+      <div class="wrap">
+        <details id="erros">
+          <summary>Erros</summary>
+          <div class="rolar"><table>
+            <thead><tr><th scope="col">erro</th><th scope="col">o que fazer</th></tr></thead>
+            <tbody>
+              <tr><td><code>ERR_SERVE_EM_BAIXO</code></td><td>O serviço local não responde. Reinicia o cliente MCP, que o arranca sozinho.</td></tr>
+              <tr><td><code>ERR_SEM_CHROME</code></td><td>Abre a Folha de Horas e confirma que a ponte está ligada nas Opções.</td></tr>
+              <tr><td><code>ERR_SEM_CONTEXTO</code></td><td>Recarrega a Folha de Horas: o serviço reiniciou depois de a página carregar.</td></tr>
+              <tr><td><code>ERR_SEM_ABA</code></td><td>Não há nenhuma aba do Suite aberta. Abre-a ou recarrega-a.</td></tr>
+              <tr><td><code>ERR_MES_DIFERENTE</code></td><td>Muda o mês na página. O MCP nunca o muda por ti.</td></tr>
+              <tr><td><code>ERR_OCUPADO</code></td><td>Há uma proposta à espera no painel. Aplica-a ou cancela-a primeiro.</td></tr>
+              <tr><td><code>ERR_LOTE_A_CORRER</code></td><td>Já está um lote a escrever no Suite. Espera que termine.</td></tr>
+              <tr><td><code>ERR_SESSION</code></td><td>A sessão do Suite expirou. Entra outra vez.</td></tr>
+              <tr><td><code>ERR_PROPOSTA_DESCONHECIDA</code></td><td>O <code>id</code> passado a <code>aplicar</code> não corresponde a nenhuma proposta pendente.</td></tr>
+              <tr><td><code>ERR_EXTENSAO_ANTIGA</code></td><td>Atualiza a extensão para a 1.1.0, ou usa <code>modo: "sobregravar"</code>.</td></tr>
+            </tbody>
+          </table></div>
+          <p class="nota">Lista completa em <a href="https://github.com/williansaez/suite-timesheet-mcp/blob/main/CONTRACT.md">CONTRACT.md</a>.</p>
+        </details>
+      </div>
+    </section>
 
     <section class="fecho">
       <div class="wrap">
