@@ -37,7 +37,7 @@
     html { scroll-behavior: smooth; scroll-padding-top: calc(var(--navh) + 20px); }
     body {
       margin: 0; color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.6;
-      -webkit-font-smoothing: antialiased; overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
       background-color: var(--bg);
       background-image:
         radial-gradient(60vw 50vh at 100% 25%, rgba(42,127,186,0.16), transparent 70%),
@@ -60,6 +60,7 @@
     code { font-size: 0.88em; color: var(--accent); background: rgba(31,102,153,0.08); padding: 0.1em 0.4em; border-radius: 5px; overflow-wrap: anywhere; }
     .skip { position: fixed; left: 12px; top: -60px; z-index: 30; padding: 10px 14px; background: var(--accent); color: #fff; font-weight: 700; border-radius: 8px; text-decoration: none; }
     .skip:focus { top: 12px; }
+    .skip:hover { color: #fff; }
     .wrap { width: min(1200px, 100% - 2 * var(--gutter)); margin-inline: auto; }
 
     nav.top { position: sticky; top: 0; z-index: 20; background: rgba(244,248,251,0.86); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
@@ -74,7 +75,7 @@
     .hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(28px, 5vw, 72px); align-items: center; padding: clamp(48px, 9vh, 104px) 0 clamp(40px, 7vh, 80px); }
     .hero .icone { width: 84px; height: 84px; padding: 14px; background: #fff; border-radius: 22px; border: 1px solid var(--line); box-shadow: var(--shadow); }
     .hero h1 { margin-top: 28px; font-size: clamp(2.3rem, 4.8vw, 4rem); }
-    .hero h1 em { font-style: normal; color: var(--accent); background-image: linear-gradient(var(--accent-2), var(--accent-2)); background-repeat: no-repeat; background-size: 100% 4px; background-position: 0 100%; padding-bottom: 6px; }
+    .hero h1 em { font-style: normal; color: var(--accent); text-decoration: underline 4px var(--accent-2); text-underline-offset: 10px; text-decoration-skip-ink: none; }
     .lede { margin-top: 24px; font-size: clamp(1.05rem, 1.4vw, 1.2rem); color: var(--soft); }
     .lede + .lede { margin-top: 10px; font-size: 1rem; color: var(--muted); }
     .acoes { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
@@ -125,8 +126,25 @@
     footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
     .traco { height: 3px; background: var(--brand); }
 
+    .passos { margin-top: 36px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+    .passos .card { display: grid; gap: 14px; align-content: start; }
+    .passos h3 { display: flex; align-items: center; gap: 12px; }
+    .passos p { color: var(--soft); font-size: 15.5px; }
+    .balao { font-size: 17px; line-height: 1.45; color: var(--text); background: #eaf3fa; border: 1px solid #c4dcee; border-radius: 16px 16px 16px 4px; padding: 14px 18px; }
+    .aprovar { justify-self: start; font: 700 14px/1 var(--sans); color: #fff; background: var(--ok); border-radius: 8px; padding: 10px 16px; }
+    .diagrama { margin-top: 28px; overflow-x: auto; }
+    .diagrama svg { display: block; min-width: 760px; width: 100%; height: auto; }
+    .diagrama text { font-family: var(--sans); fill: var(--text); }
+    .diagrama .m { font-family: var(--mono); fill: var(--muted); }
+    .garantias { margin-top: 32px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+    @media (max-width: 1100px) { .garantias { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 560px) { .garantias { grid-template-columns: minmax(0, 1fr); } }
+    .garantias h3::before { content: "✓ "; color: var(--ok); }
+    .garantias p { margin-top: 8px; color: var(--soft); font-size: 15.5px; }
+
     @media (max-width: 900px) {
       .hero { grid-template-columns: minmax(0, 1fr); }
+      .passos { grid-template-columns: minmax(0, 1fr); }
       nav.top ul { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -181,9 +199,83 @@
       </figure>
     </div>
 
-    <!-- @como -->
+    <section id="como">
+      <div class="wrap">
+        <h2>Como funciona</h2>
+        <p class="intro">O Suite não tem API para agentes. Este servidor dá-lhe uma, sem tocar no Suite: quem lê e escreve é a extensão, no teu browser, com a tua sessão.</p>
+        <div class="passos">
+          <div class="card">
+            <h3><span class="num">1</span>Pedes</h3>
+            <p class="balao">Lança 4 h de hoje no Alfa: migração de dados.</p>
+            <p>Em linguagem natural, no chat do teu agente.</p>
+          </div>
+          <div class="card">
+            <h3><span class="num">2</span>O agente propõe</h3>
+            <p>Lê o mês aberto, os projetos do teu dropdown e o que já está lançado, e monta a proposta com <code>propor</code>. Abre o painel da extensão com a pré-visualização. Nada é escrito.</p>
+          </div>
+          <div class="card">
+            <h3><span class="num">3</span>Tu aprovas</h3>
+            <p>Clicas Aplicar no painel, ou aprovas a tool <code>aplicar</code> no teu cliente MCP. Só aí as horas são escritas.</p>
+            <span class="aprovar" aria-hidden="true">✓ Aplicar</span>
+          </div>
+        </div>
+        <div class="diagrama" role="img" aria-label="O agente fala por stdio com o mcp.js, que fala por HTTP local com o serve.js em 127.0.0.1:18765. A extensão no browser faz long-poll ao serve.js, lê e escreve a Folha de Horas do Suite com a tua sessão, e mostra o painel com a pré-visualização e o botão Aplicar.">
+          <svg viewBox="0 0 960 250" aria-hidden="true">
+            <defs>
+              <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2a7fba" /></marker>
+            </defs>
+            <g fill="#fff" stroke="#d8e0e8" stroke-width="1.5">
+              <rect x="10" y="30" width="150" height="76" rx="12" />
+              <rect x="200" y="30" width="150" height="76" rx="12" />
+              <rect x="390" y="30" width="170" height="76" rx="12" stroke="#1f6699" stroke-width="2" />
+              <rect x="600" y="30" width="150" height="76" rx="12" />
+              <rect x="790" y="30" width="160" height="76" rx="12" />
+              <rect x="590" y="166" width="170" height="64" rx="12" />
+            </g>
+            <g stroke="#2a7fba" stroke-width="2" fill="none" marker-end="url(#seta)">
+              <line x1="160" y1="68" x2="198" y2="68" />
+              <line x1="350" y1="68" x2="388" y2="68" />
+              <line x1="600" y1="68" x2="562" y2="68" />
+              <line x1="750" y1="68" x2="788" y2="68" />
+            </g>
+            <line x1="675" y1="106" x2="675" y2="166" stroke="#2a7fba" stroke-width="2" stroke-dasharray="4 4" />
+            <g font-size="16" font-weight="700" text-anchor="middle">
+              <text x="85" y="64">Agente</text>
+              <text x="275" y="64">mcp.js</text>
+              <text x="475" y="64">serve.js</text>
+              <text x="675" y="64">Extensão</text>
+              <text x="870" y="64">Folha de Horas</text>
+              <text x="675" y="194">Painel</text>
+            </g>
+            <g font-size="12" text-anchor="middle" class="m">
+              <text x="85" y="86" class="m">cliente MCP</text>
+              <text x="275" y="86" class="m">stdio</text>
+              <text x="475" y="86" class="m">127.0.0.1:18765</text>
+              <text x="675" y="86" class="m">no teu browser</text>
+              <text x="870" y="86" class="m">do Suite</text>
+              <text x="675" y="214" class="m">pré-visualização e Aplicar</text>
+              <text x="179" y="22" class="m">stdio</text>
+              <text x="369" y="22" class="m">HTTP</text>
+              <text x="580" y="22" class="m">long-poll</text>
+              <text x="769" y="22" class="m">sessão</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
 
-    <!-- @garantias -->
+    <section id="garantias">
+      <div class="wrap">
+        <h2>Garantias</h2>
+        <p class="intro">O que este servidor nunca faz. Detalhes, e a forma de verificar cada afirmação, em <a href="https://github.com/williansaez/suite-timesheet-mcp/blob/main/SECURITY.md">SECURITY.md</a>.</p>
+        <div class="garantias">
+          <div class="card"><h3>Nunca fala com o Suite</h3><p>Quem lê e escreve é a extensão, no teu browser, com a tua sessão.</p></div>
+          <div class="card"><h3>Nunca escreve sem ti</h3><p>Cada lançamento é uma proposta. Só é escrito quando clicas Aplicar no painel ou aprovas a tool <code>aplicar</code>.</p></div>
+          <div class="card"><h3>Nunca submete meses</h3><p>Nem muda o mês aberto na página. Escreve só no mês que tens à frente.</p></div>
+          <div class="card"><h3>Só local</h3><p>Escuta apenas em <code>127.0.0.1</code>, guarda tudo em memória e não tem telemetria.</p></div>
+        </div>
+      </div>
+    </section>
 
     <!-- @instalar -->
 
