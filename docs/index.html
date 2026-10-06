@@ -97,6 +97,7 @@
 
     .code { position: relative; margin-top: 14px; }
     .code pre { margin: 0; padding: 16px 20px; padding-right: 104px; background: var(--code-bg); color: var(--code-text); border-radius: 12px; overflow-x: auto; font-size: 14px; line-height: 1.6; }
+    .code pre code { color: inherit; background: none; padding: 0; font-size: inherit; overflow-wrap: normal; }
     .code pre .c { color: var(--code-muted); }
     .copy { font: 700 12px/1 var(--sans); color: #fff; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 10px 12px; min-width: 84px; cursor: pointer; transition: background 200ms, border-color 200ms; }
     .copy:hover { background: rgba(255,255,255,0.16); }
@@ -141,6 +142,19 @@
     @media (max-width: 560px) { .garantias { grid-template-columns: minmax(0, 1fr); } }
     .garantias h3::before { content: "✓ "; color: var(--ok); }
     .garantias p { margin-top: 8px; color: var(--soft); font-size: 15.5px; }
+
+    .instalar { margin-top: 36px; display: grid; gap: 36px; }
+    .instalar > div > h3 { display: flex; align-items: center; gap: 12px; font-size: 1.35rem; }
+    .instalar > div > p { margin-top: 10px; color: var(--soft); }
+    [role="tablist"] { margin-top: 16px; display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid var(--line); }
+    html:not(.js) [role="tablist"] { display: none; }
+    [role="tab"] { flex: none; font: 700 14px/1 var(--sans); color: var(--soft); background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 14px; cursor: pointer; }
+    [role="tab"][aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+    [role="tabpanel"] { padding-top: 6px; }
+    [role="tabpanel"] > h4 { margin: 18px 0 0; font-size: 1rem; }
+    .js [role="tabpanel"] > h4 { display: none; }
+    [role="tabpanel"] p { margin-top: 12px; color: var(--soft); font-size: 15.5px; }
+    .nota { margin-top: 16px; font-size: 15px; color: var(--muted); }
 
     @media (max-width: 900px) {
       .hero { grid-template-columns: minmax(0, 1fr); }
@@ -277,7 +291,61 @@
       </div>
     </section>
 
-    <!-- @instalar -->
+    <section id="instalar">
+      <div class="wrap">
+        <h2>Instalar</h2>
+        <p class="intro">Precisas de Node.js ≥ 20, de Chrome ou Edge com a extensão Suite Timesheet Importer, e da Folha de Horas do Suite aberta com sessão válida.</p>
+        <div class="instalar">
+          <div>
+            <h3><span class="num">1</span>Ligar a ponte na extensão</h3>
+            <p>Nas <b>Opções</b> da extensão, liga <b>Ligação ao servidor local (ponte MCP)</b>, clica em <b>Guardar</b> e aceita a permissão para <code>http://127.0.0.1/*</code>. Depois recarrega a Folha de Horas. É feito uma vez, à mão: sem isto a extensão nunca toca na rede local.</p>
+          </div>
+          <div>
+            <h3><span class="num">2</span>Registar o servidor no teu agente</h3>
+            <p>Não é preciso clonar nada: o <code>npx</code> descarrega o pacote e corre-o. <code>@1</code> fixa a versão principal, por isso recebes as correções 1.x e nunca uma versão incompatível.</p>
+            <div role="tablist" aria-label="Agente">
+              <button role="tab" type="button" id="t-copilot" aria-controls="p-copilot" aria-selected="true">Copilot (VS Code)</button>
+              <button role="tab" type="button" id="t-code" aria-controls="p-code" aria-selected="false" tabindex="-1">Claude Code</button>
+              <button role="tab" type="button" id="t-desktop" aria-controls="p-desktop" aria-selected="false" tabindex="-1">Claude Desktop</button>
+              <button role="tab" type="button" id="t-outros" aria-controls="p-outros" aria-selected="false" tabindex="-1">Outros</button>
+            </div>
+            <div role="tabpanel" id="p-copilot" aria-labelledby="t-copilot">
+              <h4>Copilot (VS Code)</h4>
+              <div class="code"><pre><code>code --add-mcp '{"name":"suite-timesheet","command":"npx","args":["-y","suite-timesheet-mcp@1"]}'</code></pre><button class="copy" type="button" data-copy-pre>Copiar</button></div>
+              <p>Depois recarrega a janela. As tools aparecem no modo <b>Agent</b> do Copilot.</p>
+            </div>
+            <div role="tabpanel" id="p-code" aria-labelledby="t-code">
+              <h4>Claude Code</h4>
+              <div class="code"><pre><code>claude mcp add --scope user suite-timesheet -- npx -y suite-timesheet-mcp@1</code></pre><button class="copy" type="button" data-copy-pre>Copiar</button></div>
+            </div>
+            <div role="tabpanel" id="p-desktop" aria-labelledby="t-desktop">
+              <h4>Claude Desktop (inclui Cowork)</h4>
+              <p>Em Definições → Programador → Editar configuração (<code>~/Library/Application Support/Claude/claude_desktop_config.json</code> no macOS, <code>%APPDATA%\Claude\claude_desktop_config.json</code> no Windows):</p>
+              <div class="code"><pre><code>{
+  "mcpServers": {
+    "suite-timesheet": {
+      "command": "npx",
+      "args": ["-y", "suite-timesheet-mcp@1"]
+    }
+  }
+}</code></pre><button class="copy" type="button" data-copy-pre>Copiar</button></div>
+              <p>Reinicia o Claude Desktop.</p>
+            </div>
+            <div role="tabpanel" id="p-outros" aria-labelledby="t-outros">
+              <h4>Outros agentes</h4>
+              <p>O mesmo comando, por stdio. Atenção à chave do ficheiro de configuração: o VS Code usa <code>servers</code>, a maioria dos outros usa <code>mcpServers</code>.</p>
+              <div class="code"><pre><code>npx -y suite-timesheet-mcp@1</code></pre><button class="copy" type="button" data-copy-pre>Copiar</button></div>
+            </div>
+            <p class="nota">Se o cliente não encontrar o <code>npx</code> (comum em apps abertas pelo Dock, que não herdam o PATH do terminal), usa o caminho absoluto dado por <code>which npx</code>. No Windows, usa <code>"command": "cmd"</code> com <code>"args": ["/c", "npx", "-y", "suite-timesheet-mcp@1"]</code>.</p>
+          </div>
+          <div>
+            <h3><span class="num">3</span>Verificar</h3>
+            <p>Pede ao agente: <i>"consulta o estado da ponte do Suite Timesheet"</i>. A tool <code>estado</code> deve responder com a ponte ligada e o mês visível na página. As Opções da extensão passam a mostrar "Agente ligado há N s".</p>
+            <p class="warn"><b>Mantém a aprovação manual da tool <code>aplicar</code>.</b> Com ela em aprovação automática, qualquer proposta é escrita sem mais nenhuma confirmação.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- @usar -->
 
@@ -318,7 +386,65 @@
   </footer>
 
   <script>
-    /* @js */
+    document.documentElement.classList.add('js');
+
+    // Copiar: Clipboard API; sem ela (file://, permissão negada) seleciona o texto e pede Ctrl+C.
+    function selecionar(el) {
+      const r = document.createRange();
+      r.selectNodeContents(el);
+      const s = getSelection();
+      s.removeAllRanges();
+      s.addRange(r);
+    }
+    function marcar(botao, estado, texto) {
+      botao.dataset.state = estado;
+      botao.textContent = texto;
+      clearTimeout(botao._t);
+      botao._t = setTimeout(() => { delete botao.dataset.state; botao.textContent = 'Copiar'; }, 2400);
+    }
+    document.addEventListener('click', async (ev) => {
+      const botao = ev.target.closest('.copy');
+      if (!botao) return;
+      const alvo = botao.hasAttribute('data-copy-pre')
+        ? botao.closest('.code').querySelector('pre')
+        : botao.parentElement.querySelector('code');
+      const texto = botao.dataset.copy || alvo.textContent;
+      try {
+        if (!navigator.clipboard) throw new Error('sem clipboard');
+        await navigator.clipboard.writeText(texto);
+        marcar(botao, 'ok', 'Copiado');
+      } catch {
+        selecionar(alvo);
+        marcar(botao, 'manual', 'Ctrl+C para copiar');
+      }
+    });
+
+    // Separadores: só o JS esconde painéis, para que sem JS fiquem todos visíveis.
+    for (const lista of document.querySelectorAll('[role="tablist"]')) {
+      const tabs = [...lista.querySelectorAll('[role="tab"]')];
+      const ativar = (tab, foco) => {
+        for (const t of tabs) {
+          const sel = t === tab;
+          t.setAttribute('aria-selected', String(sel));
+          t.tabIndex = sel ? 0 : -1;
+          document.getElementById(t.getAttribute('aria-controls')).hidden = !sel;
+        }
+        if (foco) tab.focus();
+      };
+      ativar(tabs.find((t) => t.getAttribute('aria-selected') === 'true') ?? tabs[0], false);
+      lista.addEventListener('click', (ev) => {
+        const tab = ev.target.closest('[role="tab"]');
+        if (tab) ativar(tab, false);
+      });
+      lista.addEventListener('keydown', (ev) => {
+        const i = tabs.indexOf(document.activeElement);
+        if (i < 0) return;
+        const n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[ev.key];
+        if (n === undefined) return;
+        ev.preventDefault();
+        ativar(tabs[(n + tabs.length) % tabs.length], true);
+      });
+    }
   </script>
 </body>
 </html>
