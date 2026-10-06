@@ -62,7 +62,8 @@ Detalhes e forma de verificar cada afirmação: [SECURITY.md](SECURITY.md).
 
 ### 1. Ligar a ponte na extensão
 
-Nas **Opções** da extensão, liga **Ligação ao servidor local (ponte MCP)**, clica em
+Abre `edge://extensions`, clica em **Detalhes** na Suite Timesheet Importer e depois em **Opções da
+extensão**. Aí, liga **Ligação ao servidor local (ponte MCP)**, clica em
 **Guardar** e aceita a permissão para `http://127.0.0.1/*`. Depois recarrega a Folha de Horas.
 
 Este passo é manual e feito uma vez: sem ele a extensão nunca toca na rede local.
