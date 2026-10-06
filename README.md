@@ -223,7 +223,7 @@ Os modos `normal` e `somar` e os comentários precisam da extensão ≥ 1.1.0.
 | `ERR_SERVE_EM_BAIXO` | o serviço local não responde; reinicia o cliente MCP (ele arranca-o sozinho) |
 | `ERR_SEM_CHROME` | abre a Folha de Horas e confirma que a ponte está ligada nas Opções |
 | `ERR_SEM_CONTEXTO` | recarrega a Folha de Horas (o serviço reiniciou depois de a página carregar) |
-| `ERR_SEM_ABA` | não há nenhuma aba do Suite aberta; abre-a ou recarrega-a |
+| `ERR_SEM_ABA` | não há nenhum separador do Suite aberto; abre-o ou recarrega-o |
 | `ERR_MES_DIFERENTE` | muda o mês na página; o MCP nunca o muda por ti |
 | `ERR_OCUPADO` | há uma proposta à espera no painel; aplica-a ou cancela-a primeiro |
 | `ERR_LOTE_A_CORRER` | já está um lote a escrever no Suite; espera que termine |
