@@ -132,11 +132,11 @@
     .passos p { color: var(--soft); font-size: 15.5px; }
     .balao { font-size: 17px; line-height: 1.45; color: var(--text); background: #eaf3fa; border: 1px solid #c4dcee; border-radius: 16px 16px 16px 4px; padding: 14px 18px; }
     .aprovar { justify-self: start; font: 700 14px/1 var(--sans); color: #fff; background: var(--ok); border-radius: 8px; padding: 10px 16px; }
-    /* Fluxo: horizontal em ecrãs largos, vertical abaixo de 1200 px (setas rodam com o eixo). */
+    /* Fluxo: mesma quebra dos passos (900 px). Horizontal acima, vertical abaixo; as setas rodam com o eixo. */
     .fluxo { margin-top: 28px; display: flex; align-items: stretch; padding: 28px; }
     .no { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 4px; text-align: center; padding: 14px 10px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; }
     .no b { font-weight: 700; font-size: 16px; }
-    .no span { font: 12px/1.4 var(--mono); color: var(--muted); }
+    .no span { font: 12px/1.4 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
     .no .painel { margin-top: 8px; padding: 5px 8px; border: 1px dashed var(--accent-2); border-radius: 8px; color: var(--soft); font: 700 12px/1.3 var(--sans); }
     .no.largo { flex-grow: 1.5; }
     .no.medio { flex-grow: 1.25; }
@@ -145,9 +145,15 @@
     .lig i::after { content: ""; position: absolute; top: 50%; right: -1px; transform: translateY(-50%); border-left: 9px solid var(--accent-2); border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
     .lig.volta i::after { right: auto; left: -1px; border-left: 0; border-right: 9px solid var(--accent-2); }
     @media (max-width: 1200px) {
-      .fluxo { flex-direction: column; max-width: 380px; margin-inline: auto; padding: 22px; }
-      .no { flex: none; }
-      .lig { flex: none; height: 56px; }
+      .fluxo { padding: 20px; }
+      .no { padding: 12px 6px; }
+      .no b { font-size: 15px; }
+      .lig { flex-basis: 56px; font-size: 10px; }
+    }
+    @media (max-width: 900px) {
+      .fluxo { flex-direction: column; align-items: center; padding: 22px; }
+      .no { flex: none; width: min(100%, 360px); }
+      .lig { flex: none; width: min(100%, 360px); height: 56px; font-size: 11px; }
       .lig i { position: absolute; left: 50%; top: 0; width: 2px; height: 100%; transform: translateX(-50%); }
       .lig span { position: absolute; left: calc(50% + 14px); top: 50%; transform: translateY(-50%); }
       .lig i::after { top: auto; bottom: -1px; right: auto; left: 50%; transform: translateX(-50%); border: 0; border-top: 9px solid var(--accent-2); border-left: 5px solid transparent; border-right: 5px solid transparent; }
@@ -263,7 +269,7 @@
           <div class="lig"><span>stdio</span><i></i></div>
           <div class="no"><b>mcp.js</b><span>servidor MCP</span></div>
           <div class="lig"><span>HTTP</span><i></i></div>
-          <div class="no"><b>serve.js</b><span>127.0.0.1:18765</span></div>
+          <div class="no"><b>serve.js</b><span>127.0.0.1<wbr>:18765</span></div>
           <div class="lig volta"><span>long-poll</span><i></i></div>
           <div class="no largo"><b>Extensão</b><span>no teu browser</span><span class="painel">painel com Aplicar</span></div>
           <div class="lig"><span>sessão</span><i></i></div>
