@@ -23,6 +23,12 @@ test('o site lista exatamente as tools do servidor', () => {
   assert.deepEqual(noSite.toSorted(), FERRAMENTAS.map((f) => f.name).toSorted());
 });
 
+test('a contagem de tools no site é a do servidor', () => {
+  const contagens = [...html.matchAll(/data-tool-count[^>]*>([^<]*)</g)].map((m) => m[1]);
+  assert.ok(contagens.length > 0, 'falta data-tool-count no site');
+  for (const c of contagens) assert.equal(Number(c), FERRAMENTAS.length);
+});
+
 test('os caminhos locais são relativos e existem', async () => {
   const caminhos = [...html.matchAll(/\b(?:src|href|poster)="([^"]+)"/g)]
     .map((m) => m[1])

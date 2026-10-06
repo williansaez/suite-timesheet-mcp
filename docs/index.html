@@ -88,7 +88,6 @@
     .hero figure { margin: 0; }
     .player { border-radius: 14px; overflow: hidden; background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); }
     .player video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
-    .hero figcaption { margin-top: 12px; font: 13px/1.5 var(--mono); color: var(--muted); }
 
     section { padding: clamp(56px, 9vh, 104px) 0; border-top: 1px solid var(--line); }
     .intro { margin-top: 16px; color: var(--soft); }
@@ -208,7 +207,7 @@
         </div>
         <div class="factos">
           <span><b data-version="1.1.0">v1.1.0</b></span>
-          <span><b>6</b> tools</span>
+          <span><b data-tool-count>6</b> tools</span>
           <span>só <b>127.0.0.1</b></span>
           <span><b>sem</b> telemetria</span>
         </div>
@@ -219,7 +218,6 @@
             <source src="media/lancamento-1.1.0.mp4" type="video/mp4" />
           </video>
         </div>
-        <figcaption>Lançamento da 1.1.0, com o Copilot como exemplo de agente. Dados fictícios. <a href="media/lancamento-1.1.0.mp4">Abrir o vídeo</a>.</figcaption>
       </figure>
     </div>
 
@@ -393,7 +391,7 @@
     <section id="tools">
       <div class="wrap">
         <h2>Tools</h2>
-        <p class="intro">Seis tools. Quatro só leem ou preparam; só <code>aplicar</code> escreve, e pede a tua aprovação.</p>
+        <p class="intro">Todas leem, preparam ou esperam, exceto <code>aplicar</code>: é a única que escreve, e deve ficar em aprovação manual no teu cliente MCP.</p>
         <ul class="tools">
           <li class="card" data-tool="estado"><b>estado</b><span>Ponte ligada? Mês visível, nº de projetos, lote a correr.</span></li>
           <li class="card" data-tool="projetos"><b>projetos</b><span>Projetos do dropdown da página: <code>option_id</code>, nome, trancado.</span></li>
@@ -451,7 +449,7 @@
   <script>
     document.documentElement.classList.add('js');
 
-    // Copiar: Clipboard API; sem ela (file://, permissão negada) seleciona o texto e pede Ctrl+C.
+    // Copiar: Clipboard API; sem ela (file://, permissão negada) deixa o texto selecionado para o atalho do sistema.
     function selecionar(el) {
       const r = document.createRange();
       r.selectNodeContents(el);
@@ -478,7 +476,7 @@
         marcar(botao, 'ok', 'Copiado');
       } catch {
         selecionar(alvo);
-        marcar(botao, 'manual', 'Ctrl+C para copiar');
+        marcar(botao, 'manual', 'Selecionado');
       }
     });
 
