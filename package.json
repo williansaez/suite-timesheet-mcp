@@ -1,6 +1,6 @@
 {
   "name": "suite-timesheet-mcp",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "description": "Servidor MCP para o Suite Timesheet Importer: um agente de IA lê e propõe horas; a extensão escreve depois de confirmação humana.",
   "license": "SEE LICENSE IN LICENSE",
